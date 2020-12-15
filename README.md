@@ -5,3 +5,11 @@
 ##### Platform: Windows x64
 ##### Time spent: ~50h
 ##### Created by VıctorıaN
+
+---
+
+### Running the game
+
+To run the game download the "x64/Release" folder and run .exe.
+All the data files will be generated automatically.
+
