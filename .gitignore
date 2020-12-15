@@ -112,7 +112,6 @@ ipch/
 *.vsp
 *.vspx
 *.sap
-.vs
 
 # Visual Studio Trace Files
 *.e2e
@@ -349,3 +348,6 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#Mine
+data/
