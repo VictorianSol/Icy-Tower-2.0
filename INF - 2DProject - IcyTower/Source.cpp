@@ -22,18 +22,16 @@ Zakres projektu:
 17. textury platform
 18. efekt paralaksy œcian oraz t³a
 19. textury œcian oraz t³a
+20. animacje wallboostu
 
 Co zrealizowalem w biezacym tygodniu?
-	- fixed window resize bugs
+	- animacje wallboostu
 
 Co planuje na kolejny tydzien?
 	- textury platform zale¿nie od wysokoœci
-	- animacje wallboostu
 
 
 ------------------------------------------------------------*/
-
-
 
 
 	

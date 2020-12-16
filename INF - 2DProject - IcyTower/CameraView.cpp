@@ -15,7 +15,7 @@ void CameraView::update(RenderWindow& window, Player& player) {
 	if (!player.alive(view))
 		scrollSpeed <= -0.025f ? scrollSpeed *= 0.97f : scrollSpeed = 0.f;
 	else {
-		if (player.getPosition().y <= view.getCenter().y - view.getSize().y / 4.f)
+		if (player.getPosition().y - player.getSize().y / 2.f <= view.getCenter().y - view.getSize().y / 4.f)
 			scrollSpeed = std::min(scrollSpeed * 0.995f, scrollSpeedMax);
 		else if (scrollSpeed < -4.5f)
 			scrollSpeed = std::min(scrollSpeed * 0.96f, scrollSpeedMax);
@@ -32,7 +32,7 @@ void CameraView::update(RenderWindow& window, Player& player) {
 
 void CameraView::followPlayer(Player& player) {
 	float temp;
-	if (player.getPosition().y + player.getSize().y <= view.getCenter().y &&
+	if (player.getPosition().y + player.getSize().y / 2.f <= view.getCenter().y &&
 		player.getVelocity().y < 0.f) {
 		temp = -pow(abs((player.getPosition().y - view.getCenter().y) / 250.f), 3);
 		if (scrollSpeed > temp)
