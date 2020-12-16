@@ -13,9 +13,11 @@ Player::Player(CameraView& view) {	// 58:44
 	player.setTexture(&playerTexture);
 	player.setTextureRect(IntRect(0, 0, playerTextureSize.x, playerTextureSize.y));
 
-	player.setPosition(view.getSize().x / 2 - playerShape.x / 2.f, view.getSize().y - playerShape.y);
+	player.setPosition(view.getSize().x / 2 - playerShape.x / 2.f, view.getSize().y - playerShape.y / 2.f);
 	playerFeetOffset = playerShape.x - playerShape.x * 30.f / 44.f;
 	playerHitboxOffset = playerShape.x - playerShape.x * 38.f / 44.f;
+
+	player.setOrigin(Vector2f(player.getSize().x / 2.f, player.getSize().y / 2.f));
 
 	animationFrame = 0;
 	animationTexture = 0;
@@ -37,7 +39,10 @@ void Player::draw(RenderWindow& window, string menuType) {
 
 void Player::draw(RenderWindow& window) {
 	animationFrame++;
+	if (canBoost)
+		player.setRotation(0.f);
 	if (playerVelocity == Vector2f(0.f, 0.f) && canJump) {
+		// Idle
 		if (animationType != 0) {
 			animationFrame = 60;
 			animationType = 0;
@@ -46,7 +51,9 @@ void Player::draw(RenderWindow& window) {
 		if (animationFrame >= 60) {
 			animationFrame = 0;
 
-			if (animationTexture >= 3)
+			if (animationTexture == 11)
+				animationTexture = 14;
+			else if (animationTexture >= 3)
 				animationTexture = 0;
 			else
 				animationTexture++;
@@ -68,16 +75,25 @@ void Player::draw(RenderWindow& window) {
 			animationType += 8;
 		else
 			animationType += 16;
+		if (canBoost)
+			animationType += 32;
 
 		if (animationTypeOld != animationType)
 			animationFrame = 15;
 
-		if (animationFrame >= 15) {
+		if (!canBoost) {
+			animationTexture = 11;
+			player.setTextureRect(
+				IntRect(animationTexture * playerTextureSize.x, 0,
+					playerTextureSize.x, playerTextureSize.y)
+			);
+			player.rotate(5.f + abs(playerVelocity.y) / 3.f);
+		}
+		else if (animationFrame >= 15) {
 			animationFrame = 0;
 
 			if (playerVelocity.x != 0.f && playerVelocity.y == 0.f && canJump) {
-
-
+				// Moving
 				if (animationTexture >= 7 || animationTexture <= 3)
 					animationTexture = 4;
 				else
@@ -93,13 +109,16 @@ void Player::draw(RenderWindow& window) {
 							-(float)playerTextureSize.x, playerTextureSize.y));
 			}
 			else if (playerVelocity.y != 0.f) {
+				// Airborn
 				if (playerVelocity.x == 0.f) {
+					// Vertical Jump
 					animationTexture = 9;
 					player.setTextureRect(
 						IntRect(animationTexture * playerTextureSize.x, 0,
 							playerTextureSize.x, playerTextureSize.y));
 				}
 				else {
+					// Moving Airborn
 					if (playerVelocity.y < 0.f)
 						animationTexture = 8;
 					else
@@ -125,8 +144,8 @@ void Player::draw(RenderWindow& window) {
 void Player::move(CameraView& view) {
 	int moved = 0;
 
-	if (player.getPosition().y + playerShape.y >= view.getSize().y) {
-		player.setPosition(Vector2f(player.getPosition().x, view.getSize().y - playerShape.y));
+	if (player.getPosition().y + playerShape.y / 2.f >= view.getSize().y) {
+		player.setPosition(Vector2f(player.getPosition().x, view.getSize().y - playerShape.y / 2.f));
 		canJump = true;
 	}
 
@@ -175,12 +194,12 @@ void Player::collidePlatforms(Platforms& platforms)
 		Vector2f playerpos = player.getPosition();
 		platformlen.y /= 2;
 
-		if (playerpos.y + playerShape.y >= platformpos.y &&
-			playerpos.y + playerShape.y <= platformpos.y + platformlen.y &&
-			playerpos.x + playerShape.x - playerFeetOffset >= platformpos.x &&
-			playerpos.x + playerFeetOffset <= platformpos.x + platformlen.x &&
+		if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
+			playerpos.y + playerShape.y / 2.f <= platformpos.y + platformlen.y &&
+			playerpos.x + playerShape.x / 2.f - playerFeetOffset >= platformpos.x &&
+			playerpos.x - playerShape.x / 2.f + playerFeetOffset <= platformpos.x + platformlen.x &&
 			playerVelocity.y >= 0.f) {
-			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y));
+			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
 			canJump = true;
 			currentLevel = platforms.getPlatformLevel(i);
 			return;
@@ -194,8 +213,8 @@ void Player::collideWalls(Walls& walls) {
 	wallStopL = false;
 	wallStopR = false;
 
-	if (playerpos.x + playerHitboxOffset <= walls.getPosition(0).x + walls.getSize(0).x) {
-		player.setPosition(walls.getPosition(0).x + walls.getSize(0).x - playerHitboxOffset, playerpos.y);
+	if (playerpos.x - playerShape.x / 2.f + playerHitboxOffset <= walls.getPosition(0).x + walls.getSize(0).x) {
+		player.setPosition(walls.getPosition(0).x + walls.getSize(0).x + playerShape.x / 2.f - playerHitboxOffset, playerpos.y);
 		if (playerVelocity.y < 0.f && playerVelocity.x < -13.f && canBoost) {
 			playerVelocity.x = -playerVelocity.x;
 			player.move(25.f, 0.f);
@@ -209,8 +228,8 @@ void Player::collideWalls(Walls& walls) {
 			wallStopL = true;
 		}
 	}
-	else if (playerpos.x + playerShape.x - playerHitboxOffset >= walls.getPosition(1).x) {
-		player.setPosition(walls.getPosition(1).x - playerShape.x + playerHitboxOffset, playerpos.y);
+	else if (playerpos.x + playerShape.x / 2.f - playerHitboxOffset >= walls.getPosition(1).x) {
+		player.setPosition(walls.getPosition(1).x - playerShape.x / 2.f + playerHitboxOffset, playerpos.y);
 		if (playerVelocity.y < 0.f && playerVelocity.x > 13.f && canBoost) {
 			playerVelocity.x = -playerVelocity.x;
 			player.move(-25.f, 0.f);
@@ -227,13 +246,13 @@ void Player::collideWalls(Walls& walls) {
 }
 
 bool Player::alive(CameraView& view) {
-	if (player.getPosition().y >= view.getCenter().y + view.getSize().y / 2.f)
+	if (player.getPosition().y - playerShape.y / 2.f >= view.getCenter().y + view.getSize().y / 2.f)
 		return false;
 	return true;
 }
 
 bool Player::alive(View& view) {
-	if (player.getPosition().y >= view.getCenter().y + view.getSize().y / 2.f)
+	if (player.getPosition().y - playerShape.y / 2.f >= view.getCenter().y + view.getSize().y / 2.f)
 		return false;
 	return true;
 }
