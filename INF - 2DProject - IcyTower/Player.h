@@ -45,5 +45,7 @@ private:
 	bool canJump;
 	bool canBoost;
 	bool wallStopL, wallStopR;
+	bool onEdgeL;
+	bool onEdgeR;
 	int currentLevel;
 };
