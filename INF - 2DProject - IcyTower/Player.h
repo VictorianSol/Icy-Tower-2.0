@@ -30,8 +30,6 @@ public:
 	bool saveToFile();
 	bool loadFromFile();
 
-	void move(Vector2f offset) { player.move(offset); }
-
 private:
 	RectangleShape player;
 	Vector2f playerShape;
