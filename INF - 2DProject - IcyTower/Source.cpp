@@ -25,8 +25,7 @@ Zakres projektu:
 20. animacje wallboostu
 
 Co zrealizowalem w biezacym tygodniu?
-	- animacje wallboostu
-	- fixed memory leak
+	- naprawione dynamiczne zmiany wielkoœci okna gry
 
 Co planuje na kolejny tydzien?
 	- textury platform zale¿nie od wysokoœci
@@ -167,21 +166,14 @@ int main() {
 						skipTitle = deathMenu->loop(window, clock, *view,
 							*player, *platforms, *walls);
 						delete deathMenu;
-						delete view;
-						delete player;
-						delete gui;
-						delete platforms;
-						delete walls;
 					}
 			}
-			else {
-				delete view;
-				delete player;
-				delete gui;
-				delete platforms;
-				delete walls;
-			}
 		}
+		delete view;
+		delete player;
+		delete gui;
+		delete platforms;
+		delete walls;
 	}
 
 	return 0;
