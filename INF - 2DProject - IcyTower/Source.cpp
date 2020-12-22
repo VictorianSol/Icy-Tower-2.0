@@ -79,7 +79,6 @@ int main() {
 	RenderWindow window(loadResolution(), "Icy Tower 2.0");
 	//window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(111);
-	Clock clock;
 	bool loop;
 	bool skipTitle = false;
 	Image icon;
@@ -95,7 +94,7 @@ int main() {
 
 		if (!skipTitle) {
 			Menu* titleMenu = new Menu(*view, "Title");
-			loop = titleMenu->loop(window, clock, *view,
+			loop = titleMenu->loop(window, *view,
 				*player, *platforms, *walls);
 			delete titleMenu;
 		}
@@ -113,7 +112,7 @@ int main() {
 					if (event.key.code == Keyboard::Escape) {
 						if (player->alive(*view)) {
 							Menu* pauseMenu = new Menu(*view, "Pause");
-							loop = pauseMenu->loop(window, clock, *view,
+							loop = pauseMenu->loop(window, *view,
 								*player, *platforms, *walls);
 							delete pauseMenu;
 							if (loop == false)
@@ -122,7 +121,7 @@ int main() {
 					}
 					if (event.key.code == Keyboard::F1) {
 						Menu* helpMenu = new Menu(*view, "Help");
-						helpMenu->loop(window, clock, *view,
+						helpMenu->loop(window, *view,
 							*player, *platforms, *walls);
 						delete helpMenu;
 					}
@@ -163,7 +162,7 @@ int main() {
 					if (view->getSpeed() == 0.f) {
 						loop = false;
 						Menu* deathMenu = new Menu(*view, "Death");
-						skipTitle = deathMenu->loop(window, clock, *view,
+						skipTitle = deathMenu->loop(window, *view,
 							*player, *platforms, *walls);
 						delete deathMenu;
 					}

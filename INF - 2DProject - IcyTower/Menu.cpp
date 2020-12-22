@@ -143,11 +143,9 @@ bool Menu::move(RenderWindow& window, CameraView& view) {
 	return true;
 }
 
-bool Menu::loop(RenderWindow& window, Clock& clock, CameraView& view,
+bool Menu::loop(RenderWindow& window, CameraView& view,
 	Player& player, Platforms& platforms, Walls& walls) {
 	while (window.isOpen()) {
-		if (clock.getElapsedTime().asMilliseconds() >= 1000.f / 120.f)
-			clock.restart();
 
 		if (!move(window, view)) {
 			if (type == "Pause") {
@@ -170,7 +168,7 @@ bool Menu::loop(RenderWindow& window, Clock& clock, CameraView& view,
 					player.loadFromFile()) {
 					bool exitMenu;
 					Menu* pauseMenu = new Menu(view, "Pause");
-					exitMenu = pauseMenu->loop(window, clock, view,
+					exitMenu = pauseMenu->loop(window, view,
 						player, platforms, walls);
 					delete pauseMenu;
 					return exitMenu;
@@ -180,13 +178,13 @@ bool Menu::loop(RenderWindow& window, Clock& clock, CameraView& view,
 				return true;
 			else if (exitTag == "Options") {
 				Menu* optionsMenu = new Menu(view, "Options");
-				optionsMenu->loop(window, clock, view,
+				optionsMenu->loop(window, view,
 					player, platforms, walls);
 				delete optionsMenu;
 			}
 			else if (exitTag == "High Scores") {
 				Menu* hsMenu = new Menu(view, "High Scores");
-				hsMenu->loop(window, clock, view,
+				hsMenu->loop(window, view,
 					player, platforms, walls);
 				delete hsMenu;
 			}
@@ -244,7 +242,7 @@ bool Menu::loop(RenderWindow& window, Clock& clock, CameraView& view,
 				return true;
 			else if (exitTag == "Show Highscores") {
 				Menu* hsMenu = new Menu(view, "High Scores");
-				hsMenu->loop(window, clock, view,
+				hsMenu->loop(window, view,
 					player, platforms, walls);
 				delete hsMenu;
 				return false;
