@@ -15,7 +15,7 @@ class CameraView;
 class Menu{
 public:
 	Menu(CameraView& view, string type);
-	bool loop(RenderWindow& window, Clock& clock, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
+	bool loop(RenderWindow& window, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
 
 private:
 	string loadDifficulty();
