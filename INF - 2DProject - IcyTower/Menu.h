@@ -33,6 +33,7 @@ private:
 	string menuString[MAX_MENUPOS];
 	Text currentLevel;
 	Text highScores[DIFFICULTY_COUNT];
+	ConvexShape star;
 	Text help;
 	string resolutionS[4] = {
 		"Resolution: 400 x 400",

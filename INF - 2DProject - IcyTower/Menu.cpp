@@ -43,6 +43,25 @@ Menu::Menu(CameraView& view, std::string type) {
 		title = type;
 		menuPosCount = 1;
 		menuString[0] = "Return";
+		star.setFillColor(Color(138, 3, 3));
+		star.setPointCount(10);
+		Vector2f star_vertices[10] = {
+			{109.f, 0.f},
+			{134.f, 84.f},
+			{217.f, 84.f},
+			{151.f, 134.f},
+			{176.f, 217.f},
+			{109.f, 167.f},
+			{42.f, 217.f},
+			{68.f, 136.f},
+			{1.f, 84.f},
+			{84.f, 84.f}
+		};
+		for (int i = 0; i < 10; i++)
+			star.setPoint(i, star_vertices[i]);
+		star.setOrigin(108.5f, 108.5f);
+		star.scale(0.15f, 0.15f);
+		star.setPosition(0.436700012 * view.getSize().x, 0.890150024 * view.getSize().y);
 	}
 	else if (type == "Help") {
 		title = type;
@@ -160,6 +179,9 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 		walls.draw(window, view);
 		platforms.draw(window, view);
 		player.draw(window, type);
+
+		if (type == "High Scores")
+			window.draw(star);
 
 		if (type == "Title") {
 			if (exitTag == "Continue") {

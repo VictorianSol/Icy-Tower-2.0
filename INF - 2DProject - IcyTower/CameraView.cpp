@@ -10,7 +10,7 @@ CameraView::CameraView(RenderWindow& window) {
 	maxSpeed = 5.f;
 }
 
-void CameraView::update(RenderWindow& window, Player& player) {
+void CameraView::update(RenderWindow* window, Player& player) {
 	scrollSpeedMax = std::max(-player.getCurrentLevel() / (maxSpeedLevel / maxSpeed), -maxSpeed);
 	if (!player.alive(view))
 		scrollSpeed <= -0.025f ? scrollSpeed *= 0.97f : scrollSpeed = 0.f;
@@ -27,7 +27,7 @@ void CameraView::update(RenderWindow& window, Player& player) {
 	}
 	view.move(0.f, scrollSpeed);
 
-	window.setView(view);
+	window->setView(view);
 }
 
 void CameraView::followPlayer(Player& player) {

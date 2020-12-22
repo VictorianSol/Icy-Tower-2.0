@@ -148,7 +148,7 @@ int main() {
 				if (player->alive(*view))
 					player->move(*view);
 
-				view->update(window, *player);
+				view->update(&window, *player);
 				gui->update(*view, *player);
 
 				window.clear(Color(46, 54, 63));

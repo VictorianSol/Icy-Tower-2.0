@@ -10,7 +10,7 @@ class Player;
 class CameraView{
 public:
 	CameraView(RenderWindow& window);
-	void update(RenderWindow& window, Player& player);
+	void update(RenderWindow* window, Player& player);
 	Vector2f getSize() { return view.getSize(); }
 	Vector2f getCenter() { return view.getCenter(); }
 	float getSpeed() { return scrollSpeed; }
