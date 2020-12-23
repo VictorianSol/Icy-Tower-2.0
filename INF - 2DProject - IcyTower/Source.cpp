@@ -1,3 +1,46 @@
+/*------------------------------------------------------------
+
+Temat projektu: Icy Tower - Gra 2D (platformówka)
+
+Zakres projektu:
+1. klasa gracza
+2. movement gracza
+3. kolizja z granicami ekranu
+/-/ 4. menu (osobna klasa)
+5. textura sprite'u
+6. p³ynne animacje textur
+7. grawitacja
+8. proceduralnie, losowo generowane platformy
+9. kolizje z platformami
+10. statyczna praca kamery powoli ruszaj¹ca w górê wie¿y
+11. dynamiczna praca kamery œledz¹ca gracza
+12. mechanika odbijania od œcian ze zwiêkszonym pêdem
+13. klasa menu napisana od zera
+14. Odczyt/zapis tabeli wyników z pliku z podzia³em na trudnoœæ
+15. zapis/odczyt stanu gry do/z pliku
+16. wybór trudnoœci rozgrywki
+17. textury platform
+18. efekt paralaksy œcian oraz t³a
+19. textury œcian oraz t³a
+20. animacje wallboostu
+
+Co zrealizowalem w biezacym tygodniu?
+	- naprawione dynamiczne zmiany wielkoœci okna gry
+
+Co planuje na kolejny tydzien?
+	- textury platform zale¿nie od wysokoœci
+
+
+------------------------------------------------------------*/
+
+
+	
+/*------------------------------------------------------------
+
+Program glowny	
+
+------------------------------------------------------------*/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <SFML/Graphics.hpp>
 #include <iostream>
