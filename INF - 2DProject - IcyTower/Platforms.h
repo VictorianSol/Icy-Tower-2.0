@@ -28,7 +28,7 @@ private:
 	int CheckView(CameraView& view);
 	void Randomise(CameraView& view, int i);
 	RectangleShape platforms[PLATFORMS_NUMBER];
-	Texture platformsTexture;
+	Texture platformsTexture[2];
 	Vector2u platformsTextureSize;
 	int platformLevel[PLATFORMS_NUMBER];
 	string diffString;
