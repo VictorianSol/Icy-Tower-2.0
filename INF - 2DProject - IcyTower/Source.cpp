@@ -23,13 +23,13 @@ Zakres projektu:
 18. efekt paralaksy œcian oraz t³a
 19. textury œcian oraz t³a
 20. animacje wallboostu
+21. textury platform zale¿nie od wysokoœci
 
 Co zrealizowalem w biezacym tygodniu?
 	- naprawione dynamiczne zmiany wielkoœci okna gry
 
 Co planuje na kolejny tydzien?
-	- textury platform zale¿nie od wysokoœci
-
+	
 
 ------------------------------------------------------------*/
 
