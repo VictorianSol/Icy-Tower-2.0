@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*------------------------------------------------------------
 
 Temat projektu: Icy Tower - Gra 2D (platformówka)
@@ -42,8 +41,6 @@ Program glowny
 
 ------------------------------------------------------------*/
 
-=======
->>>>>>> master
 #define _CRT_SECURE_NO_WARNINGS
 #include <SFML/Graphics.hpp>
 #include <iostream>

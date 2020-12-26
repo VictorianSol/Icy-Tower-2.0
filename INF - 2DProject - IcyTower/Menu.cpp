@@ -62,7 +62,7 @@ Menu::Menu(CameraView& view, std::string type) {
 			star.setPoint(i, star_vertices[i]);
 		star.setOrigin(108.5f, 108.5f);
 		star.scale(0.15f, 0.15f);
-		star.setPosition(0.436700012 * view.getSize().x, 0.890150024 * view.getSize().y);
+		star.setPosition(view.getSize().x / 2.f, 0.890150024 * view.getSize().y);
 	}
 	else if (type == "Help") {
 		title = type;
