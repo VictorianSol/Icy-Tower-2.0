@@ -8,7 +8,7 @@ Player::Player(CameraView& view) {	// 58:44
 	playerTextureSize.x /= 15;
 	playerTextureSize.y /= 1;
 
-	playerShape = Vector2f(2.65f * playerTextureSize.x, 2.65f * playerTextureSize.y);
+	playerShape = Vector2f(2.5f * playerTextureSize.x, 2.5f * playerTextureSize.y);
 	player.setSize(playerShape);
 	player.setTexture(&playerTexture);
 	player.setTextureRect(IntRect(0, 0, playerTextureSize.x, playerTextureSize.y));
