@@ -5,6 +5,8 @@
 #include "CameraView.h"
 #include "Walls.h"
 
+#define CHARACTER_COUNT 2
+
 using namespace std;
 using namespace sf;
 
@@ -26,6 +28,8 @@ public:
 	int getCurrentLevel() { return currentLevel; }
 	bool alive(CameraView& view);
 	bool alive(View& view);
+	string getCurrentCharacter();
+	void changeCurrentCharacter();
 
 	bool saveToFile();
 	bool loadFromFile();
@@ -48,4 +52,9 @@ private:
 	bool onEdgeL;
 	bool onEdgeR;
 	int currentLevel;
+
+	string characters[CHARACTER_COUNT] = {
+		"Icy",
+		"Disco Dave"
+	};
 };
