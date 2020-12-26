@@ -4,6 +4,7 @@
 #include "CameraView.h"
 
 #define PLATFORMS_NUMBER 5
+#define PLATFORMS_TYPE 3
 
 using namespace sf;
 using namespace std;
@@ -28,7 +29,7 @@ private:
 	int CheckView(CameraView& view);
 	void Randomise(CameraView& view, int i);
 	RectangleShape platforms[PLATFORMS_NUMBER];
-	Texture platformsTexture[2];
+	Texture platformsTexture[PLATFORMS_TYPE];
 	Vector2u platformsTextureSize;
 	int platformLevel[PLATFORMS_NUMBER];
 	string diffString;

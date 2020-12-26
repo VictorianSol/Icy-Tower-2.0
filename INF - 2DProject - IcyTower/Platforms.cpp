@@ -39,6 +39,7 @@ for (int i = 1, j = 125; i <= 16; i++, j += 25)
 Platforms::Platforms(CameraView& view){
 	platformsTexture[0].loadFromFile("resources\\platforms.png");
 	platformsTexture[1].loadFromFile("resources\\platforms_ice.png");
+	platformsTexture[2].loadFromFile("resources\\platforms_wood.png");
 	platformsTextureSize = platformsTexture[0].getSize();
 	platformsTextureSize.x /= 20;
 	platformsTextureSize.y /= 16;
@@ -51,7 +52,6 @@ Platforms::Platforms(CameraView& view){
 		platforms[i].setTextureRect(
 			IntRect(0.f, (platforms[i].getSize().x / 25 - 5) * platformsTextureSize.y,
 				(platforms[i].getSize().x / 25 + 1) * platformsTextureSize.x, platformsTextureSize.y));
-		platforms[i].setFillColor(Color(220, 220, 224));
 		platforms[i].setPosition(
 			Vector2f(
 				std::max(95.f, std::min(view.getSize().x - platforms[i].getSize().x - 95.f, (rand() % 20) * (view.getSize().x / 20.f))),
@@ -62,10 +62,18 @@ Platforms::Platforms(CameraView& view){
 
 void Platforms::draw(RenderWindow& window, CameraView& view) {
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
-		if ((platformLevel[i] / 100) % 2)
+		if ((platformLevel[i] / 100) % PLATFORMS_TYPE == 1) {
 			platforms[i].setTexture(&platformsTexture[1]);
-		else
+			platforms[i].setFillColor(Color(220, 220, 224));
+		}
+		else if ((platformLevel[i] / 100) % PLATFORMS_TYPE == 2) {
+			platforms[i].setTexture(&platformsTexture[2]);
+			platforms[i].setFillColor(Color::White);
+		}
+		else {
 			platforms[i].setTexture(&platformsTexture[0]);
+			platforms[i].setFillColor(Color(220, 220, 224));
+		}
 	Randomise(view, CheckView(view));
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
 		window.draw(platforms[i]);
