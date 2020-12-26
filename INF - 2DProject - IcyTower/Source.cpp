@@ -24,9 +24,11 @@ Zakres projektu:
 19. textury œcian oraz t³a
 20. animacje wallboostu
 21. textury platform zale¿nie od wysokoœci
+22. wybór wygl¹du bohatera
 
 Co zrealizowalem w biezacym tygodniu?
 	- naprawione dynamiczne zmiany wielkoœci okna gry
+	- dodano wybór wygl¹du bohatera w opcjach
 
 Co planuje na kolejny tydzien?
 	
