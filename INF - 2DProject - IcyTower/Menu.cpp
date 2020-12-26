@@ -34,10 +34,11 @@ Menu::Menu(CameraView& view, std::string type) {
 	}
 	else if (type == "Options") {
 		title = type;
-		menuPosCount = 3;
+		menuPosCount = 4;
 		menuString[0] = "Resolution: Undefined";
 		menuString[1] = "Difficulty: Undefined";
-		menuString[2] = "Return";
+		menuString[2] = "Character: Undefined";
+		menuString[3] = "Return";
 	}
 	else if (type == "High Scores") {
 		title = type;
@@ -255,8 +256,9 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			menu[0].setString("Difficulty: " + loadDifficulty());
 			sprintf_s(temp, "Resolution: %d x %d", window.getSize().x, window.getSize().y);
 			menu[1].setString(temp);
+			menu[2].setString("Character: " + player.getCurrentCharacter());
 
-			if (exitTag.compare(0, 12, "Difficulty: ") == 0) {
+			if (!exitTag.compare(0, 12, "Difficulty: ")) {
 				int j = 0;
 				for (int i = 0; i < DIFFICULTY_COUNT; i++)
 					if (exitTag == "Difficulty: " + difficulties[i]) {
@@ -276,7 +278,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 					fclose(fp);
 				}
 			}
-			else if (exitTag.compare(0, 12, "Resolution: ") == 0) {
+			else if (!exitTag.compare(0, 12, "Resolution: ")) {
 				int j = 0;
 				for (int i = 0; i < resCount; i++)
 					if (exitTag == resolutionS[i]) {
@@ -301,6 +303,8 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 					fclose(fp);
 				}
 			}
+			else if (!exitTag.compare(0, 11, "Character: "))
+				player.changeCurrentCharacter();
 			if (exitTag == "Return")
 				return false;
 		}
