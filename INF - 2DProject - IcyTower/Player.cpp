@@ -3,7 +3,10 @@
 using namespace sf;
 
 Player::Player(CameraView& view) {	// 58:44
-	playerTexture.loadFromFile("resources\\player.png");
+	if (getCurrentCharacter() == characters[1])
+		playerTexture.loadFromFile("resources\\discodave.png");
+	else
+		playerTexture.loadFromFile("resources\\player.png");
 	playerTextureSize = playerTexture.getSize();
 	playerTextureSize.x /= 15;
 	playerTextureSize.y /= 1;
@@ -13,7 +16,7 @@ Player::Player(CameraView& view) {	// 58:44
 	player.setTexture(&playerTexture);
 	player.setTextureRect(IntRect(0, 0, playerTextureSize.x, playerTextureSize.y));
 
-	player.setPosition(view.getSize().x / 2 - playerShape.x / 2.f, view.getSize().y - playerShape.y / 2.f);
+	player.setPosition(view.getSize().x / 2, view.getSize().y - playerShape.y / 2.f);
 	playerFeetOffset = playerShape.x - playerShape.x * 33.f / 44.f;
 	playerHitboxOffset = playerShape.x - playerShape.x * 38.f / 44.f;
 
@@ -284,6 +287,46 @@ bool Player::alive(View& view) {
 	if (player.getPosition().y - playerShape.y / 2.f >= view.getCenter().y + view.getSize().y / 2.f)
 		return false;
 	return true;
+}
+
+string Player::getCurrentCharacter() {
+	FILE* fp;
+	string character = characters[0];
+	char characterC[20];
+	fp = fopen("data\\character.dat", "r+b");
+	if (fp == NULL)
+		return character;
+	fread(&characterC, sizeof(char[20]), 1, fp);
+	fclose(fp);
+	character = characterC;
+	return character;
+}
+
+void Player::changeCurrentCharacter() {
+	string tempCharacter = getCurrentCharacter();
+	int j = 0;
+	for (int i = 0; i < CHARACTER_COUNT; i++)
+		if (tempCharacter == characters[i]) {
+			j = i;
+			break;
+		}
+		else
+			j = -1;
+	tempCharacter = characters[j < CHARACTER_COUNT - 1 ? j + 1 : 0];
+	if (tempCharacter == characters[1])
+		playerTexture.loadFromFile("resources\\discodave.png");
+	else
+		playerTexture.loadFromFile("resources\\player.png");
+	FILE* fp;
+	fp = fopen("data\\character.dat", "w+b");
+	if (fp == NULL) {
+		perror("Couldn't save character data to character.dat");
+		return;
+	}
+	char tempCharacterC[20];
+	strcpy(tempCharacterC, tempCharacter.c_str());
+	fwrite(&tempCharacterC, sizeof(char[20]), 1, fp);
+	fclose(fp);
 }
 
 bool Player::saveToFile() {
