@@ -37,14 +37,15 @@ for (int i = 1, j = 125; i <= 16; i++, j += 25)
 */
 
 Platforms::Platforms(CameraView& view){
-	platformsTexture.loadFromFile("resources\\platforms_20x16.png");
-	platformsTextureSize = platformsTexture.getSize();
+	platformsTexture[0].loadFromFile("resources\\platforms.png");
+	platformsTexture[1].loadFromFile("resources\\platforms_ice.png");
+	platformsTextureSize = platformsTexture[0].getSize();
 	platformsTextureSize.x /= 20;
 	platformsTextureSize.y /= 16;
 
 	srand(time(NULL));
 	for (int i = 0; i < PLATFORMS_NUMBER; i++) {
-		platforms[i].setTexture(&platformsTexture);
+		platforms[i].setTexture(&platformsTexture[0]);
 		platformLevel[i] = i + 1;
 		platforms[i].setSize(Vector2f((rand() % 10) * 25 + 250, 62.5f));
 		platforms[i].setTextureRect(
@@ -60,6 +61,11 @@ Platforms::Platforms(CameraView& view){
 }
 
 void Platforms::draw(RenderWindow& window, CameraView& view) {
+	for (int i = 0; i < PLATFORMS_NUMBER; i++)
+		if ((platformLevel[i] / 100) % 2)
+			platforms[i].setTexture(&platformsTexture[1]);
+		else
+			platforms[i].setTexture(&platformsTexture[0]);
 	Randomise(view, CheckView(view));
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
 		window.draw(platforms[i]);

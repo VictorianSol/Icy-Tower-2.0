@@ -41,15 +41,30 @@ void Player::draw(RenderWindow& window, string menuType) {
 
 void Player::draw(RenderWindow& window) {
 	animationFrame++;
+	animationType = 0;
+	if (playerVelocity.x > 0.f)
+		animationType += 1;
+	else if (playerVelocity.x == 0.f)
+		animationType += 2;
+	else
+		animationType += 4;
+	if (playerVelocity.y < 0.f)
+		animationType += 8;
+	else if (playerVelocity.y == 0.f)
+		animationType += 16;
+	else
+		animationType += 32;
+	if (!canBoost)
+		animationType += 64;
+	if (onEdgeL || onEdgeR)
+		animationType += 128;
+	if (animationTypeOld != animationType)
+		animationFrame = 60;
+
 	if (canBoost)
 		player.setRotation(0.f);
 	if (playerVelocity == Vector2f(0.f, 0.f) && canJump) {
 		// Idle
-		if (animationType != 0) {
-			animationFrame = 60;
-			animationType = 0;
-		}
-
 		if (animationFrame >= 60) {
 			animationFrame = 0;
 
@@ -76,23 +91,6 @@ void Player::draw(RenderWindow& window) {
 		}
 	}
 	else {
-		animationType = 0;
-		if (playerVelocity.x > 0.f)
-			animationType += 1;
-		else
-			animationType += 2;
-		if (playerVelocity.y < 0.f)
-			animationType += 4;
-		else if (playerVelocity.y == 0.f)
-			animationType += 8;
-		else
-			animationType += 16;
-		if (!canBoost)
-			animationType += 32;
-
-		if (animationTypeOld != animationType)
-			animationFrame = 15;
-
 		if (!canBoost) {
 			animationTexture = 11;
 			player.setTextureRect(
@@ -190,7 +188,7 @@ void Player::move(CameraView& view) {
 	}
 
 	if (!moved || moved == 6)
-		if (playerVelocity.x >= 1.f || playerVelocity.x <= -1.f)
+		if (playerVelocity.x >= 0.66f || playerVelocity.x <= -0.66f)
 			playerVelocity.x *= 0.93f;
 		else
 			playerVelocity.x = 0;
@@ -200,9 +198,6 @@ void Player::move(CameraView& view) {
 
 void Player::collidePlatforms(Platforms& platforms)
 {
-	onEdgeL = false;
-	onEdgeR = false;
-	canJump = false;
 	for (int i = 0; i < platforms.getNoPlatforms(); i++) {
 		Vector2f platformpos = platforms.getPosition(i);
 		Vector2f platformlen = platforms.getSize(i);
@@ -215,15 +210,31 @@ void Player::collidePlatforms(Platforms& platforms)
 			playerpos.x <= platformpos.x + platformlen.x &&
 			playerVelocity.y >= 0.f) {
 			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
+			playerpos = player.getPosition();
 			canJump = true;
 			currentLevel = platforms.getPlatformLevel(i);
-			if (playerpos.x - playerFeetOffset < platformpos.x)
+			if (playerpos.x - playerFeetOffset <= platformpos.x
+				&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
+				player.setPosition(platformpos.x + playerFeetOffset, playerpos.y);
 				onEdgeL = true;
-			else if (playerpos.x + playerFeetOffset > platformpos.x + platformlen.x)
+				onEdgeR = false;
+			}
+			else if (playerpos.x + playerFeetOffset >= platformpos.x + platformlen.x
+				&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
+				player.setPosition(platformpos.x + platformlen.x - playerFeetOffset, playerpos.y);
 				onEdgeR = true;
+				onEdgeL = false;
+			}
+			else {
+				onEdgeL = false;
+				onEdgeR = false;
+			}
 			return;
 		}
 	}
+	onEdgeL = false;
+	onEdgeR = false;
+	canJump = false;
 }
 
 void Player::collideWalls(Walls& walls) {
