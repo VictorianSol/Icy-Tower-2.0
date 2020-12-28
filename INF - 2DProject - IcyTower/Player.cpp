@@ -298,8 +298,7 @@ string Player::getCurrentCharacter() {
 		return character;
 	fread(&characterC, sizeof(char[20]), 1, fp);
 	fclose(fp);
-	character = characterC;
-	return character;
+	return characterC;
 }
 
 void Player::changeCurrentCharacter() {

@@ -18,9 +18,12 @@ public:
 	bool loop(RenderWindow& window, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
 
 private:
-	string loadDifficulty();
 	void draw(RenderWindow& window);
 	bool move(RenderWindow& window, CameraView& view);
+	string loadDifficulty();
+	int getPlaycount();
+	string getPlaytime();
+
 	string type;
 	int menuPosCount;
 	int menuPos;
@@ -35,6 +38,7 @@ private:
 	Text highScores[DIFFICULTY_COUNT];
 	ConvexShape star;
 	Text help;
+	Text playtime;
 	string resolutionS[4] = {
 		"Resolution: 400 x 400",
 		"Resolution: 680 x 680",

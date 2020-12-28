@@ -89,6 +89,10 @@ Menu::Menu(CameraView& view, std::string type) {
 	menuTitle.setFillColor(Color(181, 191, 205));
 	menuTitle.setCharacterSize(60);
 	menuTitle.setPosition(Vector2f(WALL_OFFSET, view.getCenter().y - view.getSize().y / 2.f));
+	playtime.setFont(font);
+	playtime.setFillColor(Color(181, 191, 205));
+	playtime.setCharacterSize(30);
+	playtime.setPosition(Vector2f(WALL_OFFSET, view.getCenter().y + view.getSize().y / 16.f - 7.f));
 
 	for (int i = 0; i < menuPosCount; i++) {
 		menu[i].setFont(font);
@@ -119,6 +123,7 @@ void Menu::draw(RenderWindow& window) {
 	for (int i = 0; i < DIFFICULTY_COUNT; i++)
 		window.draw(highScores[i]);
 	window.draw(help);
+	window.draw(playtime);
 	window.draw(menuTitle);
 }
 
@@ -331,6 +336,10 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				return false;
 		}
 		else if (type == "High Scores") {
+			char temp[100];
+			sprintf_s(temp, "Times played: %d\nTime spent: %s", getPlaycount(), getPlaytime().c_str());
+			playtime.setString(temp);
+
 			for (int j = 0; j < DIFFICULTY_COUNT; j++) {
 				FILE* fp;
 				int hsNo, hs[10];
@@ -382,7 +391,55 @@ string Menu::loadDifficulty() {
 	if (fp == NULL)
 		return difficulty;
 	fread(&charDiff, sizeof(char[10]), 1, fp);
-	difficulty = charDiff;
 	fclose(fp);
-	return difficulty;
+	return charDiff;
+}
+
+int Menu::getPlaycount() {
+	FILE* fp;
+	int playcount = 0;
+	fp = fopen("data\\Playtime.dat", "r+b");
+	if (fp == NULL)
+		return playcount;
+	fread(&playcount, sizeof(int), 1, fp);
+	fclose(fp);
+	return playcount;
+}
+
+string Menu::getPlaytime() {
+	FILE* fp;
+	char temp[100];
+	double playtime = 0;
+	fp = fopen("data\\Playtime.dat", "r+b");
+	if (fp == NULL)
+		return "0s";
+	fseek(fp, sizeof(int), SEEK_SET);
+	fread(&playtime, sizeof(double), 1, fp);
+	fclose(fp);
+
+	if (((int)playtime / 3600) != 0) {
+		sprintf_s(
+			temp,
+			"%dh %dm %ds\n",
+			(int)playtime / 3600,
+			((int)playtime - ((int)playtime / 3600) * 3600) / 60,
+			(int)playtime - ((int)playtime / 60) * 60
+		);
+	}
+	else if (((int)playtime / 60) != 0) {
+		sprintf_s(
+			temp,
+			"%dm %ds\n",
+			(int)playtime / 60,
+			(int)playtime - ((int)playtime / 60) * 60
+		);
+	}
+	else {
+		sprintf_s(
+			temp,
+			"%ds\n",
+			(int)playtime
+		);
+	}
+	return temp;
 }

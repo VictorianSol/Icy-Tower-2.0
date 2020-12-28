@@ -25,10 +25,12 @@ Zakres projektu:
 20. animacje wallboostu
 21. textury platform zale¿nie od wysokoœci
 22. wybór wygl¹du bohatera
+23. czas grania oraz iloœæ œmierci
 
 Co zrealizowalem w biezacym tygodniu?
 	- naprawione dynamiczne zmiany wielkoœci okna gry
 	- dodano wybór wygl¹du bohatera w opcjach
+	- czas grania oraz iloœæ œmierci
 
 Co planuje na kolejny tydzien?
 	
@@ -52,6 +54,7 @@ Program glowny
 #include "GUI.h"
 #include "Walls.h"
 #include "Menu.h"
+#include "Misc.h"
 
 #ifdef NDEBUG
 #include <windows.h>
@@ -59,17 +62,6 @@ Program glowny
 
 using namespace sf;
 using namespace std;
-
-VideoMode loadResolution() {
-	FILE* fp;
-	VideoMode windowres = VideoMode(400, 400);
-	fp = fopen("data\\resolution.dat", "r+b");
-	if (fp == NULL)
-		return windowres;
-	fread(&windowres, sizeof(VideoMode), 1, fp);
-	fclose(fp);
-	return windowres;
-}
 
 int main() {
 
@@ -79,6 +71,7 @@ int main() {
 #endif
 
 	RenderWindow window(loadResolution(), "Icy Tower 2.0");
+	Clock clock;
 	//window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(111);
 	bool loop;
@@ -102,7 +95,7 @@ int main() {
 		}
 		else
 			loop = true;
-
+		clock.restart();
 		while (window.isOpen() && loop) {
 			Vector2u tempSize(window.getSize());
 			Event event;
@@ -113,19 +106,23 @@ int main() {
 						gui->devOptions();
 					if (event.key.code == Keyboard::Escape) {
 						if (player->alive(*view)) {
+							addPlaytime(clock);
 							Menu* pauseMenu = new Menu(*view, "Pause");
 							loop = pauseMenu->loop(window, *view,
 								*player, *platforms, *walls);
 							delete pauseMenu;
+							clock.restart();
 							if (loop == false)
 								skipTitle = false;
 						}
 					}
 					if (event.key.code == Keyboard::F1) {
+						addPlaytime(clock);
 						Menu* helpMenu = new Menu(*view, "Help");
 						helpMenu->loop(window, *view,
 							*player, *platforms, *walls);
 						delete helpMenu;
+						clock.restart();
 					}
 				}
 				if (event.type == Event::Resized) {
@@ -137,6 +134,7 @@ int main() {
 					view->setViewport(FloatRect(0.f, 0.f, 1.f, 1.f));
 				}
 				if (event.type == Event::Closed) {
+					addPlaytime(clock);
 					player->saveToFile();
 					platforms->saveToFile();
 					view->saveToFile();
@@ -163,6 +161,8 @@ int main() {
 				if (!player->alive(*view))
 					if (view->getSpeed() == 0.f) {
 						loop = false;
+						addPlaytime(clock);
+						addPlaycount();
 						Menu* deathMenu = new Menu(*view, "Death");
 						skipTitle = deathMenu->loop(window, *view,
 							*player, *platforms, *walls);
