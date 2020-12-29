@@ -209,8 +209,8 @@ void Player::collidePlatforms(Platforms& platforms)
 
 		if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
 			playerpos.y + playerShape.y / 2.f <= platformpos.y + platformlen.y &&
-			playerpos.x >= platformpos.x &&
-			playerpos.x <= platformpos.x + platformlen.x &&
+			playerpos.x + playerFeetOffset >= platformpos.x &&
+			playerpos.x - playerFeetOffset <= platformpos.x + platformlen.x &&
 			playerVelocity.y >= 0.f) {
 			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
 			playerpos = player.getPosition();
