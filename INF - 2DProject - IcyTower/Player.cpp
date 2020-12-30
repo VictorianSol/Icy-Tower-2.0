@@ -205,7 +205,7 @@ void Player::collidePlatforms(Platforms& platforms)
 		Vector2f platformpos = platforms.getPosition(i);
 		Vector2f platformlen = platforms.getSize(i);
 		Vector2f playerpos = player.getPosition();
-		platformlen.y /= 2.f; // This causes velocity bug at platform 12
+		platformlen.y /= 2.5f; // This causes velocity bug at platform 12
 
 		if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
 			playerpos.y + playerShape.y / 2.f <= platformpos.y + platformlen.y &&
