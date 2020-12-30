@@ -4,7 +4,8 @@
 #include "CameraView.h"
 
 #define PLATFORMS_NUMBER 5
-#define PLATFORMS_TYPE 3
+#define PLATFORMS_TYPE 4
+#define PLATFORMS_CHANGE 100
 
 using namespace sf;
 using namespace std;
