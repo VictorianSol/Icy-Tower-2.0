@@ -40,6 +40,7 @@ Platforms::Platforms(CameraView& view){
 	platformsTexture[0].loadFromFile("resources\\platforms.png");
 	platformsTexture[1].loadFromFile("resources\\platforms_ice.png");
 	platformsTexture[2].loadFromFile("resources\\platforms_wood.png");
+	platformsTexture[3].loadFromFile("resources\\platforms_iron.png");
 	platformsTextureSize = platformsTexture[0].getSize();
 	platformsTextureSize.x /= 20;
 	platformsTextureSize.y /= 16;
@@ -61,20 +62,17 @@ Platforms::Platforms(CameraView& view){
 }
 
 void Platforms::draw(RenderWindow& window, CameraView& view) {
-	for (int i = 0; i < PLATFORMS_NUMBER; i++)
-		if ((platformLevel[i] / 100) % PLATFORMS_TYPE == 1) {
-			platforms[i].setTexture(&platformsTexture[1]);
-			platforms[i].setFillColor(Color(220, 220, 224));
-		}
-		else if ((platformLevel[i] / 100) % PLATFORMS_TYPE == 2) {
-			platforms[i].setTexture(&platformsTexture[2]);
-			platforms[i].setFillColor(Color::White);
-		}
-		else {
-			platforms[i].setTexture(&platformsTexture[0]);
-			platforms[i].setFillColor(Color(220, 220, 224));
-		}
 	Randomise(view, CheckView(view));
+	for (int i = 0; i < PLATFORMS_NUMBER; i++)
+		for (int j = 0; j < PLATFORMS_TYPE; j++)
+			if ((platformLevel[i] / PLATFORMS_CHANGE) % PLATFORMS_TYPE == j) {
+				platforms[i].setTexture(&platformsTexture[j]);
+				if (j == 0 || j == 1)
+					platforms[i].setFillColor(Color(220, 220, 224));
+				else
+					platforms[i].setFillColor(Color::White);
+				break;
+			}
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
 		window.draw(platforms[i]);
 }
