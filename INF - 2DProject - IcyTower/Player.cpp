@@ -293,7 +293,7 @@ string Player::getCurrentCharacter() {
 	FILE* fp;
 	string character = characters[0];
 	char characterC[20];
-	fp = fopen("data\\character.dat", "r+b");
+	fp = fopen("data\\Character.dat", "r+b");
 	if (fp == NULL)
 		return character;
 	fread(&characterC, sizeof(char[20]), 1, fp);
@@ -317,9 +317,9 @@ void Player::changeCurrentCharacter() {
 	else
 		playerTexture.loadFromFile("resources\\player.png");
 	FILE* fp;
-	fp = fopen("data\\character.dat", "w+b");
+	fp = fopen("data\\Character.dat", "w+b");
 	if (fp == NULL) {
-		perror("Couldn't save character data to character.dat");
+		perror("Couldn't save character data to Character.dat");
 		return;
 	}
 	char tempCharacterC[20];
