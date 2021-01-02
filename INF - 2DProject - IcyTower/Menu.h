@@ -23,6 +23,7 @@ private:
 	string loadDifficulty();
 	int getPlaycount();
 	string getPlaytime();
+	bool saveHighscore(Platforms& platforms, int deathLevel);
 
 	string type;
 	int menuPosCount;
