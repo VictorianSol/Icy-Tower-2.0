@@ -159,6 +159,8 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				platforms.saveToFile();
 				view.saveToFile();
 			}
+			else if (type == "Death")
+				saveHighscore(platforms, player.getCurrentLevel());
 			window.close();
 		}
 
@@ -217,33 +219,8 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			sprintf_s(temp, "Level: %d", deathLevel);
 			currentLevel.setString(temp);
 
-			if (exitTag != "") {
-				FILE* fp;
-				int hsNo = 0, highscores[10] = { 0 };
-				char hsDiff[10];
-				strcpy(hsDiff, platforms.getDifficulty().c_str());
-				sprintf_s(temp, "%s%s%s%s", "data\\", "Highscores_", hsDiff, ".dat");
-				fp = fopen(temp, "r+b");
-				if (!fp == NULL) {
-					fread(&hsNo, sizeof(int), 1, fp);
-					fread(&highscores, sizeof(int), 10, fp);
-					fclose(fp);
-				}
-				fp = fopen(temp, "w+b");
-				if (fp == NULL) {
-					perror("Error with saving highscore");
-					return false;
-				}
-				if (hsNo < 10)
-					hsNo++;
-				fwrite(&hsNo, sizeof(int), 1, fp);
-				if (highscores[9] < deathLevel)
-					highscores[9] = deathLevel;
-				sort(highscores, highscores + sizeof(highscores) / sizeof(int), greater<int>());
-				fwrite(&highscores, sizeof(int), 10, fp);
-				fclose(fp);
-			}
-
+			if (exitTag != "")
+				saveHighscore(platforms, deathLevel);
 			if (exitTag == "Respawn")
 				return true;
 			else if (exitTag == "Show Highscores") {
@@ -420,4 +397,33 @@ string Menu::getPlaytime() {
 		);
 	}
 	return temp;
+}
+
+bool Menu::saveHighscore(Platforms& platforms, int deathLevel) {
+	FILE* fp;
+	int hsNo = 0, highscores[10] = { 0 };
+	char temp[50];
+	char hsDiff[10];
+	strcpy(hsDiff, platforms.getDifficulty().c_str());
+	sprintf_s(temp, "%s%s%s%s", "data\\", "Highscores_", hsDiff, ".dat");
+	fp = fopen(temp, "r+b");
+	if (!fp == NULL) {
+		fread(&hsNo, sizeof(int), 1, fp);
+		fread(&highscores, sizeof(int), 10, fp);
+		fclose(fp);
+	}
+	fp = fopen(temp, "w+b");
+	if (fp == NULL) {
+		perror("Error with saving highscore");
+		return false;
+	}
+	if (hsNo < 10)
+		hsNo++;
+	fwrite(&hsNo, sizeof(int), 1, fp);
+	if (highscores[9] < deathLevel)
+		highscores[9] = deathLevel;
+	sort(highscores, highscores + sizeof(highscores) / sizeof(int), greater<int>());
+	fwrite(&highscores, sizeof(int), 10, fp);
+	fclose(fp);
+	return true;
 }
