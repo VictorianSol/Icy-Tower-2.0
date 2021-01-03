@@ -3,7 +3,7 @@
 #include <SFML\Graphics.hpp>
 #include "CameraView.h"
 
-#define MAX_MENUPOS 5
+#define MAX_MENUPOS 6
 #define DIFFICULTY_COUNT 3
 #define WALL_OFFSET 80.f
 
