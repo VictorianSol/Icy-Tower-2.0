@@ -2,5 +2,6 @@ Debug/
 data/
 data
 .vs/
-*.user
 */x64/
+*.user
+*.xcf
