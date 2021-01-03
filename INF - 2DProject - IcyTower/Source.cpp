@@ -28,9 +28,7 @@ Zakres projektu:
 23. czas grania oraz iloœæ œmierci
 
 Co zrealizowalem w biezacym tygodniu?
-	- naprawione dynamiczne zmiany wielkoœci okna gry
-	- dodano wybór wygl¹du bohatera w opcjach
-	- czas grania oraz iloœæ œmierci
+	- ma³e zmiany wizualne i bugfixy
 
 Co planuje na kolejny tydzien?
 	

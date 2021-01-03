@@ -12,12 +12,13 @@ Menu::Menu(CameraView& view, std::string type) {
 
 	if (type == "Title") {
 		title = "Icy Tower 2.0";
-		menuPosCount = 5;
+		menuPosCount = 6;
 		menuString[0] = "Continue";
 		menuString[1] = "New Game";
 		menuString[2] = "Options";
 		menuString[3] = "High Scores";
-		menuString[4] = "Quit";
+		menuString[4] = "Help";
+		menuString[5] = "Quit";
 	}
 	else if (type == "Pause") {
 		title = "Paused";
@@ -196,9 +197,8 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				if (view.loadFromFile(window) &&
 					platforms.loadFromFile() &&
 					player.loadFromFile()) {
-					bool exitMenu;
 					Menu* pauseMenu = new Menu(view, "Pause");
-					exitMenu = pauseMenu->loop(window, view,
+					bool exitMenu = pauseMenu->loop(window, view,
 						player, platforms, walls);
 					delete pauseMenu;
 					return exitMenu;
@@ -218,6 +218,12 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 					player, platforms, walls);
 				delete hsMenu;
 			}
+			else if (exitTag == "Help") {
+				Menu* helpMenu = new Menu(view, "Help");
+				helpMenu->loop(window, view,
+					player, platforms, walls);
+				delete helpMenu;
+			}
 			else if (exitTag == "Quit")
 				window.close();
 		}
@@ -229,10 +235,10 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			if (exitTag == "Continue")
 				return true;
 			else if (exitTag == "Save & Return") {
-				player.saveToFile();
-				platforms.saveToFile();
-				view.saveToFile();
-				return false;
+				if (player.saveToFile() &&
+				platforms.saveToFile() &&
+				view.saveToFile())
+					return false;
 			}
 		}
 		else if (type == "Death") {
@@ -309,7 +315,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			}
 			else if (!exitTag.compare(0, 11, "Character: "))
 				player.changeCurrentCharacter();
-			if (exitTag == "Return")
+			else if (exitTag == "Return")
 				return false;
 		}
 		else if (type == "High Scores") {
