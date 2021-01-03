@@ -215,7 +215,8 @@ void Player::collidePlatforms(Platforms& platforms)
 			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
 			playerpos = player.getPosition();
 			canJump = true;
-			currentLevel = platforms.getPlatformLevel(i);
+			if (currentLevel < platforms.getPlatformLevel(i))
+				currentLevel = platforms.getPlatformLevel(i);
 			if (playerpos.x - playerFeetOffset <= platformpos.x
 				&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
 				player.setPosition(platformpos.x + playerFeetOffset, playerpos.y);
