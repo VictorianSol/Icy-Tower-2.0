@@ -52,7 +52,6 @@ Program glowny
 #include "GUI.h"
 #include "Walls.h"
 #include "Menu.h"
-#include "Misc.h"
 
 #ifdef NDEBUG
 #include <windows.h>
@@ -68,7 +67,7 @@ int main() {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 
-	RenderWindow window(loadResolution(), "Icy Tower 2.0");
+	RenderWindow window(Menu::loadResolution(), "Icy Tower 2.0");
 	Clock clock;
 	//window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(111);
@@ -104,7 +103,7 @@ int main() {
 						gui->devOptions();
 					if (event.key.code == Keyboard::Escape) {
 						if (player->alive(*view)) {
-							addPlaytime(clock);
+							Menu::addPlaytime(clock);
 							Menu* pauseMenu = new Menu(*view, "Pause");
 							loop = pauseMenu->loop(window, *view,
 								*player, *platforms, *walls);
@@ -115,7 +114,7 @@ int main() {
 						}
 					}
 					if (event.key.code == Keyboard::F1) {
-						addPlaytime(clock);
+						Menu::addPlaytime(clock);
 						Menu* helpMenu = new Menu(*view, "Help");
 						helpMenu->loop(window, *view,
 							*player, *platforms, *walls);
@@ -132,7 +131,7 @@ int main() {
 					view->setViewport(FloatRect(0.f, 0.f, 1.f, 1.f));
 				}
 				if (event.type == Event::Closed) {
-					addPlaytime(clock);
+					Menu::addPlaytime(clock);
 					if (player->alive(*view)) {
 						player->saveToFile();
 						platforms->saveToFile();
@@ -163,8 +162,8 @@ int main() {
 				if (!player->alive(*view))
 					if (view->getSpeed() == 0.f) {
 						loop = false;
-						addPlaytime(clock);
-						addPlaycount();
+						Menu::addPlaytime(clock);
+						Menu::addPlaycount();
 						Menu* deathMenu = new Menu(*view, "Death");
 						skipTitle = deathMenu->loop(window, *view,
 							*player, *platforms, *walls);

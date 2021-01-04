@@ -17,6 +17,9 @@ public:
 	Menu(CameraView& view, string type);
 	bool loop(RenderWindow& window, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
 	static bool saveHighscore(Platforms& platforms, int deathLevel);
+	static VideoMode loadResolution();
+	static void addPlaycount();
+	static void addPlaytime(Clock& clock);
 
 private:
 	void draw(RenderWindow& window);
