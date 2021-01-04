@@ -161,7 +161,6 @@
   <ItemGroup>
     <ClInclude Include="CameraView.h" />
     <ClInclude Include="GUI.h" />
-    <ClInclude Include="Misc.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platforms.h" />
     <ClInclude Include="Player.h" />
