@@ -16,6 +16,7 @@ class Menu{
 public:
 	Menu(CameraView& view, string type);
 	bool loop(RenderWindow& window, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
+	static bool saveHighscore(Platforms& platforms, int deathLevel);
 
 private:
 	void draw(RenderWindow& window);
@@ -23,7 +24,6 @@ private:
 	string loadDifficulty();
 	int getPlaycount();
 	string getPlaytime();
-	bool saveHighscore(Platforms& platforms, int deathLevel);
 
 	string type;
 	int menuPosCount;

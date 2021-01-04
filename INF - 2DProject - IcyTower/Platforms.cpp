@@ -65,7 +65,7 @@ void Platforms::draw(RenderWindow& window, CameraView& view) {
 	Randomise(view, CheckView(view));
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
 		for (int j = 0; j < PLATFORMS_TYPE; j++)
-			if ((platformLevel[i] / PLATFORMS_CHANGE) % PLATFORMS_TYPE == j) {
+			if ((platformLevel[i] / 100) % PLATFORMS_TYPE == j) {
 				platforms[i].setTexture(&platformsTexture[j]);
 				if (j == 0 || j == 1)
 					platforms[i].setFillColor(Color(220, 220, 224));
