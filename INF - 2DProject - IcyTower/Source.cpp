@@ -133,9 +133,13 @@ int main() {
 				}
 				if (event.type == Event::Closed) {
 					addPlaytime(clock);
-					player->saveToFile();
-					platforms->saveToFile();
-					view->saveToFile();
+					if (player->alive(*view)) {
+						player->saveToFile();
+						platforms->saveToFile();
+						view->saveToFile();
+					}
+					else
+						Menu::saveHighscore(*platforms, player->getCurrentLevel());
 					window.close();
 				}
 			}
