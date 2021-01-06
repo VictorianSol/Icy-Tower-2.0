@@ -4,9 +4,7 @@
 
 class FrameTime{
 public:
-	void restart() {
-		clock.restart();
-	}
+	void restart() { clock.restart(); }
 	float average() {
 		float avg = 0.f;
 		int i = 0;
@@ -15,12 +13,14 @@ public:
 		return avg / i;
 	}
 	void operator ++ (int) {
-		frametime.push_back(clock.restart().asSeconds());
+		frametime.push_back(std::min(clock.restart().asSeconds(), 0.0333333333f));
 		if (frametime.size() > 30)
 			frametime.erase(frametime.begin());
 	}
+	float avgConv() { return 111.f * average(); }
+	float fps() { return 1.f / average(); }
 
 private:
-	vector<float> frametime;
+	std::vector<float> frametime;
 	sf::Clock clock;
 };

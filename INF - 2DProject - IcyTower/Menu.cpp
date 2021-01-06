@@ -5,6 +5,7 @@ Menu::Menu(CameraView& view, std::string type) {
 	font.loadFromFile("resources\\Turtles.ttf");
 	menuPos = 0;
 	resCount = sizeof(resolutionS) / sizeof(resolutionS[0]);
+	animationFrame = 0.f;
 
 	backGround.setSize(view.getSize());
 	backGround.setPosition(0.f, view.getCenter().y - view.getSize().y / 2.f);
@@ -35,11 +36,12 @@ Menu::Menu(CameraView& view, std::string type) {
 	}
 	else if (type == "Options") {
 		title = type;
-		menuPosCount = 4;
+		menuPosCount = 5;
 		menuString[0] = "Resolution: Undefined";
 		menuString[1] = "Difficulty: Undefined";
 		menuString[2] = "Character: Undefined";
-		menuString[3] = "Return";
+		menuString[3] = "FPS: Undefined";
+		menuString[4] = "Return";
 	}
 	else if (type == "High Scores") {
 		title = type;
@@ -86,19 +88,21 @@ Menu::Menu(CameraView& view, std::string type) {
 	menu[0].move(0.f, -6.5f);
 }
 
-void Menu::draw(RenderWindow& window) {
-	window.draw(backGround);
-
-	if (menu[menuPos].getCharacterSize() < 40) {
-		menu[menuPos].setCharacterSize(menu[menuPos].getCharacterSize() + 1);
-		menu[menuPos].move(0.f, -0.65f);
+void Menu::draw(RenderWindow& window, FrameTime& deltaTime) {
+	animationFrame += deltaTime.avgConv();
+	for (int j = 1; j <= animationFrame; animationFrame--) {
+		if (menu[menuPos].getCharacterSize() < 40) {
+			menu[menuPos].setCharacterSize(menu[menuPos].getCharacterSize() + 1);
+			menu[menuPos].move(0.f, -0.65f);
+		}
+		for (int i = 0; i < menuPosCount; i++)
+			if (menuPos != i)
+				if (menu[i].getCharacterSize() > 30) {
+					menu[i].setCharacterSize(menu[i].getCharacterSize() - 1);
+					menu[i].move(0.f, 0.65f);
+				}
 	}
-	for (int i = 0; i < menuPosCount; i++)
-		if (menuPos != i)
-			if (menu[i].getCharacterSize() > 30) {
-				menu[i].setCharacterSize(menu[i].getCharacterSize() - 1);
-				menu[i].move(0.f, 0.65f);
-			}
+	window.draw(backGround);
 	for (int i = 0; i < menuPosCount; i++)
 		window.draw(menu[i]);
 	window.draw(currentLevel);
@@ -150,9 +154,10 @@ bool Menu::move(RenderWindow& window, CameraView& view) {
 	return true;
 }
 
-bool Menu::loop(RenderWindow& window, CameraView& view,
+bool Menu::loop(RenderWindow& window, CameraView& view, FrameTime& deltaTime,
 	Player& player, Platforms& platforms, Walls& walls) {
 	while (window.isOpen()) {
+		deltaTime++;
 
 		if (!move(window, view)) {
 			if (type == "Pause") {
@@ -168,7 +173,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 		window.clear(Color(46, 54, 63));
 		walls.draw(window, view);
 		platforms.draw(window, view);
-		player.draw(window, type);
+		player.draw(window, type, deltaTime);
 
 		if (type == "Title") {
 			if (exitTag == "Continue") {
@@ -176,7 +181,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 					platforms.loadFromFile() &&
 					player.loadFromFile()) {
 					Menu* pauseMenu = new Menu(view, "Pause");
-					bool exitMenu = pauseMenu->loop(window, view,
+					bool exitMenu = pauseMenu->loop(window, view, deltaTime,
 						player, platforms, walls);
 					delete pauseMenu;
 					return exitMenu;
@@ -186,19 +191,19 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				return true;
 			else if (exitTag == "Options") {
 				Menu* optionsMenu = new Menu(view, "Options");
-				optionsMenu->loop(window, view,
+				optionsMenu->loop(window, view, deltaTime,
 					player, platforms, walls);
 				delete optionsMenu;
 			}
 			else if (exitTag == "High Scores") {
 				Menu* hsMenu = new Menu(view, "High Scores");
-				hsMenu->loop(window, view,
+				hsMenu->loop(window, view, deltaTime,
 					player, platforms, walls);
 				delete hsMenu;
 			}
 			else if (exitTag == "Help") {
 				Menu* helpMenu = new Menu(view, "Help");
-				helpMenu->loop(window, view,
+				helpMenu->loop(window, view, deltaTime,
 					player, platforms, walls);
 				delete helpMenu;
 			}
@@ -231,7 +236,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				return true;
 			else if (exitTag == "Show Highscores") {
 				Menu* hsMenu = new Menu(view, "High Scores");
-				hsMenu->loop(window, view,
+				hsMenu->loop(window, view, deltaTime,
 					player, platforms, walls);
 				delete hsMenu;
 				return false;
@@ -245,6 +250,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			sprintf_s(temp, "Resolution: %d x %d", window.getSize().x, window.getSize().y);
 			menu[1].setString(temp);
 			menu[2].setString("Character: " + player.getCurrentCharacter());
+			menu[3].setString("FPS: " + (string)(fps() ? "240" : "120"));
 
 			if (!exitTag.compare(0, 12, "Difficulty: ")) {
 				int j = 0;
@@ -293,6 +299,8 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 			}
 			else if (!exitTag.compare(0, 11, "Character: "))
 				player.changeCurrentCharacter();
+			else if (!exitTag.compare(0, 5, "FPS: "))
+				window.setFramerateLimit(toggleFPS() ? 240 : 120);
 			else if (exitTag == "Return")
 				return false;
 		}
@@ -339,7 +347,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view,
 				return true;
 		}
 
-		draw(window);
+		draw(window, deltaTime);
 		window.display();
 	}
 }
@@ -437,12 +445,42 @@ bool Menu::saveHighscore(Platforms& platforms, int deathLevel) {
 VideoMode Menu::loadResolution() {
 	FILE* fp;
 	VideoMode windowres = VideoMode(400, 400);
-	fp = fopen("data\\resolution.dat", "r+b");
+	fp = fopen("data\\Resolution.dat", "r+b");
 	if (fp == NULL)
 		return windowres;
 	fread(&windowres, sizeof(VideoMode), 1, fp);
 	fclose(fp);
 	return windowres;
+}
+
+bool Menu::fps() {
+	FILE* fp;
+	bool vsync = false;
+	fp = fopen("data\\FPS.dat", "r+b");
+	if (fp == NULL)
+		return vsync;
+	fread(&vsync, sizeof(bool), 1, fp);
+	fclose(fp);
+	return vsync;
+}
+
+bool Menu::toggleFPS() {
+	FILE* fp;
+	bool vsync = false;
+	fp = fopen("data\\FPS.dat", "r+b");
+	if (!fp == NULL) {
+		fread(&vsync, sizeof(bool), 1, fp);
+		fclose(fp);
+	}
+	vsync = !vsync;
+	fp = fopen("data\\FPS.dat", "w+b");
+	if (fp == NULL) {
+		perror("Error with saving vsync vsync.dat");
+		return vsync;
+	}
+	fwrite(&vsync, sizeof(bool), 1, fp);
+	fclose(fp);
+	return vsync;
 }
 
 void Menu::addPlaycount() {

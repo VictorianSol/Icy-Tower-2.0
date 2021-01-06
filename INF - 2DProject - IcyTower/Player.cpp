@@ -1,7 +1,5 @@
 #include "Player.h"
 
-using namespace sf;
-
 Player::Player(CameraView& view) {	// 58:44
 	if (getCurrentCharacter() == characters[1])
 		playerTexture.loadFromFile("resources\\discodave.png");
@@ -35,15 +33,15 @@ Player::Player(CameraView& view) {	// 58:44
 	onEdgeR = false;
 }
 
-void Player::draw(RenderWindow& window, string menuType) {
+void Player::draw(RenderWindow& window, string menuType, FrameTime& deltaTime) {
 	if (menuType == "Pause" || menuType == "Help")
 		window.draw(player);
 	else
-		draw(window);
+		draw(window, deltaTime);
 }
 
-void Player::draw(RenderWindow& window) {
-	animationFrame++;
+void Player::draw(RenderWindow& window, FrameTime& deltaTime) {
+	animationFrame += deltaTime.avgConv();
 	animationType = 0;
 	if (playerVelocity.x > 0.f)
 		animationType += 1;
@@ -100,7 +98,7 @@ void Player::draw(RenderWindow& window) {
 				IntRect(animationTexture * playerTextureSize.x, 0,
 					playerTextureSize.x, playerTextureSize.y)
 			);
-			player.rotate(5.f + abs(playerVelocity.y) / 3.f);
+			player.rotate((6.f + abs(playerVelocity.y) / 3.f) * deltaTime.avgConv());
 		}
 		else if (animationFrame >= 15) {
 			animationFrame = 0;
@@ -154,7 +152,7 @@ void Player::draw(RenderWindow& window) {
 	window.draw(player);
 }
 
-void Player::move(CameraView& view) {
+void Player::move(CameraView& view, FrameTime& deltaTime) {
 	int moved = 0;
 
 	if (player.getPosition().y + playerShape.y / 2.f >= view.getSize().y) {
@@ -163,7 +161,7 @@ void Player::move(CameraView& view) {
 	}
 
 	if (canJump == false)
-		playerVelocity.y += 0.5f;
+		playerVelocity.y += 0.5f * deltaTime.avgConv();
 	else {
 		playerVelocity.y = 0.f;
 		canBoost = true;
@@ -180,23 +178,23 @@ void Player::move(CameraView& view) {
 	if (!wallStopL && (Keyboard::isKeyPressed(Keyboard::A) ||
 		Keyboard::isKeyPressed(Keyboard::Left))) {
 		if (playerVelocity.x >= -13.3f)
-			playerVelocity.x -= 0.66f;
+			playerVelocity.x -= 0.66f * deltaTime.avgConv();
 		moved += 2;
 	}
 	if (!wallStopR && (Keyboard::isKeyPressed(Keyboard::D) ||
 		Keyboard::isKeyPressed(Keyboard::Right))) {
 		if (playerVelocity.x <= 13.3f)
-			playerVelocity.x += 0.66f;
+			playerVelocity.x += 0.66f * deltaTime.avgConv();
 		moved += 4;
 	}
 
 	if (!moved || moved == 6)
 		if (playerVelocity.x >= 0.66f || playerVelocity.x <= -0.66f)
-			playerVelocity.x *= 0.93f;
+			playerVelocity.x *= pow(pow(0.93f, 111), deltaTime.average());
 		else
 			playerVelocity.x = 0;
 
-	player.move(playerVelocity.x, playerVelocity.y);
+	player.move(playerVelocity.x * deltaTime.avgConv(), playerVelocity.y * deltaTime.avgConv());
 }
 
 void Player::collidePlatforms(Platforms& platforms)
@@ -207,34 +205,34 @@ void Player::collidePlatforms(Platforms& platforms)
 		Vector2f playerpos = player.getPosition();
 		platformlen.y /= 2.5f; // This causes velocity bug at platform 12
 
-		if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
-			playerpos.y + playerShape.y / 2.f <= platformpos.y + platformlen.y &&
-			playerpos.x + playerFeetOffset >= platformpos.x &&
-			playerpos.x - playerFeetOffset <= platformpos.x + platformlen.x &&
-			playerVelocity.y >= 0.f) {
-			player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
-			playerpos = player.getPosition();
-			canJump = true;
-			if (currentLevel < platforms.getPlatformLevel(i))
-				currentLevel = platforms.getPlatformLevel(i);
-			if (playerpos.x - playerFeetOffset <= platformpos.x
-				&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
-				player.setPosition(platformpos.x + playerFeetOffset, playerpos.y);
-				onEdgeL = true;
-				onEdgeR = false;
+		if (playerVelocity.y >= 0.f)
+			if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
+				playerpos.y + playerShape.y / 2.f <= platformpos.y + platformlen.y &&
+				playerpos.x + playerFeetOffset >= platformpos.x &&
+				playerpos.x - playerFeetOffset <= platformpos.x + platformlen.x) {
+				player.setPosition(Vector2f(playerpos.x, platformpos.y - playerShape.y / 2.f));
+				playerpos = player.getPosition();
+				canJump = true;
+				if (currentLevel < platforms.getPlatformLevel(i))
+					currentLevel = platforms.getPlatformLevel(i);
+				if (playerpos.x - playerFeetOffset <= platformpos.x
+					&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
+					player.setPosition(platformpos.x + playerFeetOffset, playerpos.y);
+					onEdgeL = true;
+					onEdgeR = false;
+				}
+				else if (playerpos.x + playerFeetOffset >= platformpos.x + platformlen.x
+					&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
+					player.setPosition(platformpos.x + platformlen.x - playerFeetOffset, playerpos.y);
+					onEdgeR = true;
+					onEdgeL = false;
+				}
+				else {
+					onEdgeL = false;
+					onEdgeR = false;
+				}
+				return;
 			}
-			else if (playerpos.x + playerFeetOffset >= platformpos.x + platformlen.x
-				&& playerVelocity.x == 0.f && !(wallStopL || wallStopR)) {
-				player.setPosition(platformpos.x + platformlen.x - playerFeetOffset, playerpos.y);
-				onEdgeR = true;
-				onEdgeL = false;
-			}
-			else {
-				onEdgeL = false;
-				onEdgeR = false;
-			}
-			return;
-		}
 	}
 	onEdgeL = false;
 	onEdgeR = false;

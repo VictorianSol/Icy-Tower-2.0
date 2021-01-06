@@ -10,22 +10,22 @@ CameraView::CameraView(RenderWindow& window) {
 	maxSpeed = 5.f;
 }
 
-void CameraView::update(RenderWindow& window, Player& player) {
+void CameraView::update(RenderWindow& window, Player& player, FrameTime& deltaTime) {
 	scrollSpeedMax = std::max(-player.getCurrentLevel() / (maxSpeedLevel / maxSpeed), -maxSpeed);
 	if (!player.alive(view))
-		scrollSpeed <= -0.025f ? scrollSpeed *= 0.97f : scrollSpeed = 0.f;
+		scrollSpeed <= -0.025f ? scrollSpeed *= pow(pow(0.97f, 111), deltaTime.average()) : scrollSpeed = 0.f;
 	else {
 		if (player.getPosition().y - player.getSize().y <= view.getCenter().y - view.getSize().y / 4.f)
-			scrollSpeed = std::min(scrollSpeed * 0.995f, scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * pow(pow(0.995f, 111), deltaTime.average()), scrollSpeedMax);
 		else if (scrollSpeed < -4.5f)
-			scrollSpeed = std::min(scrollSpeed * 0.96f, scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * pow(pow(0.96f, 111), deltaTime.average()), scrollSpeedMax);
 		else if (scrollSpeed < scrollSpeedMax)
-			scrollSpeed = std::min(scrollSpeed * 0.98f, scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * pow(pow(0.98f, 111), deltaTime.average()), scrollSpeedMax);
 		else
-			scrollSpeed *= 1.01f;
+			scrollSpeed *= pow(pow(1.01f, 111), deltaTime.average());
 		followPlayer(player);
 	}
-	view.move(0.f, scrollSpeed);
+	view.move(0.f, scrollSpeed * deltaTime.avgConv());
 
 	window.setView(view);
 }
