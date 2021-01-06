@@ -3,7 +3,7 @@
 ##### Language: C++
 ##### Dependencies: SFML 2.5.1
 ##### Platform: Windows x64
-##### Time spent: ~50h
+##### Time spent: ~70h
 ##### Created by VıctorıaN
 
 ---
