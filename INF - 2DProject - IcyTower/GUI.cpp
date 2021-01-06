@@ -34,6 +34,6 @@ void GUI::devOptions(CameraView& view, Player& player, FrameTime& deltaTime) {
 	devText[0].setString(devString[0]);
 	sprintf_s(devString[1], "scrollSpeed: %.2f", view.getSpeed());
 	devText[1].setString(devString[1]);
-	sprintf_s(devString[2], "fps: %.0f", 1.f / deltaTime.average());
+	sprintf_s(devString[2], "fps: %.0f", deltaTime.fps());
 	devText[2].setString(devString[2]);
 }
