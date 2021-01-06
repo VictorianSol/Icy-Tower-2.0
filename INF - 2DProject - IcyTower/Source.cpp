@@ -7,6 +7,7 @@
 #include "GUI.h"
 #include "Walls.h"
 #include "Menu.h"
+#include "FrameTime.h"
 
 #ifdef NDEBUG
 #include <windows.h>
@@ -24,6 +25,7 @@ int main() {
 
 	RenderWindow window(Menu::loadResolution(), "Icy Tower 2.0");
 	Clock clock;
+	FrameTime deltaTime;
 	//window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(111);
 	bool loop;
@@ -48,7 +50,9 @@ int main() {
 		else
 			loop = true;
 		clock.restart();
+		deltaTime.restart();
 		while (window.isOpen() && loop) {
+			deltaTime++;
 			Vector2u tempSize(window.getSize());
 			Event event;
 			while (window.pollEvent(event)) {
@@ -105,7 +109,7 @@ int main() {
 					player->move(*view);
 
 				view->update(window, *player);
-				gui->update(*view, *player);
+				gui->update(*view, *player, deltaTime);
 
 				window.clear(Color(46, 54, 63));
 				walls->draw(window, *view);
