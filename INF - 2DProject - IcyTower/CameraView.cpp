@@ -13,14 +13,14 @@ CameraView::CameraView(RenderWindow& window) {
 void CameraView::update(RenderWindow& window, Player& player, FrameTime& deltaTime) {
 	scrollSpeedMax = std::max(-player.getCurrentLevel() / (maxSpeedLevel / maxSpeed), -maxSpeed);
 	if (!player.alive(view))
-		scrollSpeed <= -0.025f ? scrollSpeed *= pow(/*pow(0.97f, 111)*/0.034014375639399, deltaTime.average()) : scrollSpeed = 0.f;
+		scrollSpeed <= -0.025f ? scrollSpeed *= pow(/*pow(0.97f, 111)*/0.0340143756393998048, deltaTime.average()) : scrollSpeed = 0.f;
 	else {
 		if (player.getPosition().y - player.getSize().y <= view.getCenter().y - view.getSize().y / 4.f)
-			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.995f, 111)*/0.573273626888589, deltaTime.average()), scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.995f, 111)*/0.5732736268885890793, deltaTime.average()), scrollSpeedMax);
 		else if (scrollSpeed < -4.5f)
-			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.96f, 111)*/0.0107673013337879, deltaTime.average()), scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.96f, 111)*/0.0107673013337879643, deltaTime.average()), scrollSpeedMax);
 		else if (scrollSpeed < scrollSpeedMax)
-			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.98f, 111)*/0.1061926361274437, deltaTime.average()), scrollSpeedMax);
+			scrollSpeed = std::min(scrollSpeed * (float)pow(/*pow(0.98f, 111)*/0.1061926361274437839, deltaTime.average()), scrollSpeedMax);
 		else
 			scrollSpeed *= pow(/*pow(1.01f, 111)*/3.0176751731081975724, deltaTime.average());
 		followPlayer(player);

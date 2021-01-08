@@ -190,7 +190,7 @@ void Player::move(CameraView& view, FrameTime& deltaTime) {
 
 	if (!moved || moved == 6)
 		if (playerVelocity.x >= 0.66f || playerVelocity.x <= -0.66f)
-			playerVelocity.x *= pow(/*pow(0.93f, 111)*/0.000317400268268254197, deltaTime.average());
+			playerVelocity.x *= pow(/*pow(0.93f, 111)*/0.00031740026826825419, deltaTime.average());
 		else
 			playerVelocity.x = 0;
 
