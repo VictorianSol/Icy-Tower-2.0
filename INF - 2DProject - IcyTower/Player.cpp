@@ -190,7 +190,7 @@ void Player::move(CameraView& view, FrameTime& deltaTime) {
 
 	if (!moved || moved == 6)
 		if (playerVelocity.x >= 0.66f || playerVelocity.x <= -0.66f)
-			playerVelocity.x *= pow(pow(0.93f, 111), deltaTime.average());
+			playerVelocity.x *= pow(/*pow(0.93f, 111)*/0.00031740026826825419, deltaTime.average());
 		else
 			playerVelocity.x = 0;
 
@@ -203,7 +203,7 @@ void Player::collidePlatforms(Platforms& platforms)
 		Vector2f platformpos = platforms.getPosition(i);
 		Vector2f platformlen = platforms.getSize(i);
 		Vector2f playerpos = player.getPosition();
-		platformlen.y /= 2.5f; // This causes velocity bug at platform 12
+		platformlen.y /= 2.5f; // This causes clipping at 60fps or lower
 
 		if (playerVelocity.y >= 0.f)
 			if (playerpos.y + playerShape.y / 2.f >= platformpos.y &&
