@@ -184,6 +184,17 @@ bool Platforms::loadFromFile() {
 	return true;
 }
 
+bool Platforms::canLoadState() {
+	FILE* fp;
+	bool canLoad = false;
+	fp = fopen("data\\PlatformsState.dat", "r+b");
+	if (fp != NULL) {
+		fread(&canLoad, sizeof(bool), 1, fp);
+		fclose(fp);
+	}
+	return canLoad;
+}
+
 void Platforms::loadDifficulty() {
 	FILE* fp;
 	diffRandNo = 10;

@@ -26,12 +26,14 @@ Zakres projektu:
 21. textury platform zale¿nie od wysokoœci
 22. wybór wygl¹du bohatera
 23. czas grania oraz iloœæ œmierci
+24. fizyka gry niezale¿na od fps
 
 Co zrealizowalem w biezacym tygodniu?
-	- ma³e zmiany wizualne i bugfixy
+	- uniezale¿nienie fizyki od fps
 
 Co planuje na kolejny tydzien?
-	
+	- nie koñczyæ prac nad gr¹, 
+	spodoba³o mi siê i zdecydowanie dalej zamierzam kontynuowaæ pracê w tym kierunku
 
 ------------------------------------------------------------*/
 
@@ -52,6 +54,7 @@ Program glowny
 #include "GUI.h"
 #include "Walls.h"
 #include "Menu.h"
+#include "FrameTime.h"
 
 #ifdef NDEBUG
 #include <windows.h>
@@ -69,8 +72,8 @@ int main() {
 
 	RenderWindow window(Menu::loadResolution(), "Icy Tower 2.0");
 	Clock clock;
-	//window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(111);
+	FrameTime deltaTime;
+	window.setFramerateLimit(Menu::fps() ? 240 : 120);
 	bool loop;
 	bool skipTitle = false;
 	Image icon;
@@ -86,14 +89,16 @@ int main() {
 
 		if (!skipTitle) {
 			Menu* titleMenu = new Menu(*view, "Title");
-			loop = titleMenu->loop(window, *view,
+			loop = titleMenu->loop(window, *view, deltaTime,
 				*player, *platforms, *walls);
 			delete titleMenu;
 		}
 		else
 			loop = true;
 		clock.restart();
+		deltaTime.restart();
 		while (window.isOpen() && loop) {
+			deltaTime++;
 			Vector2u tempSize(window.getSize());
 			Event event;
 			while (window.pollEvent(event)) {
@@ -105,7 +110,7 @@ int main() {
 						if (player->alive(*view)) {
 							Menu::addPlaytime(clock);
 							Menu* pauseMenu = new Menu(*view, "Pause");
-							loop = pauseMenu->loop(window, *view,
+							loop = pauseMenu->loop(window, *view, deltaTime,
 								*player, *platforms, *walls);
 							delete pauseMenu;
 							clock.restart();
@@ -116,7 +121,7 @@ int main() {
 					if (event.key.code == Keyboard::F1) {
 						Menu::addPlaytime(clock);
 						Menu* helpMenu = new Menu(*view, "Help");
-						helpMenu->loop(window, *view,
+						helpMenu->loop(window, *view, deltaTime,
 							*player, *platforms, *walls);
 						delete helpMenu;
 						clock.restart();
@@ -147,16 +152,16 @@ int main() {
 				player->collideWalls(*walls);
 
 				if (player->alive(*view))
-					player->move(*view);
+					player->move(*view, deltaTime);
 
-				view->update(&window, *player);
-				gui->update(*view, *player);
+				view->update(&window, *player, deltaTime);
+				gui->update(*view, *player, deltaTime);
 
 				window.clear(Color(46, 54, 63));
 				walls->draw(window, *view);
 				platforms->draw(window, *view);
 				gui->draw(window);
-				player->draw(window);
+				player->draw(window, deltaTime);
 				window.display();
 
 				if (!player->alive(*view))
@@ -165,7 +170,7 @@ int main() {
 						Menu::addPlaytime(clock);
 						Menu::addPlaycount();
 						Menu* deathMenu = new Menu(*view, "Death");
-						skipTitle = deathMenu->loop(window, *view,
+						skipTitle = deathMenu->loop(window, *view, deltaTime,
 							*player, *platforms, *walls);
 						delete deathMenu;
 					}

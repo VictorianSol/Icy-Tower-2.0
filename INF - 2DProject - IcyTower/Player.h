@@ -4,6 +4,7 @@
 #include "Platforms.h"
 #include "CameraView.h"
 #include "Walls.h"
+#include "FrameTime.h"
 
 #define CHARACTER_COUNT 2
 
@@ -13,13 +14,14 @@ using namespace sf;
 class Platforms;
 class CameraView;
 class Walls;
+class FrameTime;
 
 class Player {
 public:
 	Player(CameraView& view);
-	void draw(RenderWindow& window, string menuType);
-	void draw(RenderWindow& window);
-	void move(CameraView& view);
+	void draw(RenderWindow& window, string menuType, FrameTime& deltaTime);
+	void draw(RenderWindow& window, FrameTime& deltaTime);
+	void move(CameraView& view, FrameTime& deltaTime);
 	void collidePlatforms(Platforms& platforms);
 	void collideWalls(Walls& walls);
 	Vector2f getPosition() { return player.getPosition(); }
@@ -33,13 +35,14 @@ public:
 
 	bool saveToFile();
 	bool loadFromFile();
+	static bool canLoadState();
 
 private:
 	RectangleShape player;
 	Vector2f playerShape;
 	Texture playerTexture;
 	Vector2u playerTextureSize;
-	int animationFrame;
+	float animationFrame;
 	int animationTexture;
 	int animationType, animationTypeOld;
 

@@ -2,6 +2,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <SFML\Graphics.hpp>
 #include "CameraView.h"
+#include "FrameTime.h"
 
 #define MAX_MENUPOS 6
 #define DIFFICULTY_COUNT 3
@@ -11,18 +12,22 @@ using namespace sf;
 using namespace std;
 
 class CameraView;
+class FrameTime;
 
 class Menu{
 public:
 	Menu(CameraView& view, string type);
-	bool loop(RenderWindow& window, CameraView& view, Player& player, Platforms& platforms, Walls& walls);
+	bool loop(RenderWindow& window, CameraView& view, FrameTime& deltaTime,
+		Player& player, Platforms& platforms, Walls& walls);
 	static bool saveHighscore(Platforms& platforms, int deathLevel);
 	static VideoMode loadResolution();
+	static bool fps();
+	static bool toggleFPS();
 	static void addPlaycount();
 	static void addPlaytime(Clock& clock);
 
 private:
-	void draw(RenderWindow& window);
+	void draw(RenderWindow& window, FrameTime& deltaTime);
 	bool move(RenderWindow& window, CameraView& view);
 	string loadDifficulty();
 	int getPlaycount();
@@ -32,6 +37,7 @@ private:
 	int menuPosCount;
 	int menuPos;
 	string exitTag;
+	float animationFrame;
 
 	Font font;
 	Text menuTitle;

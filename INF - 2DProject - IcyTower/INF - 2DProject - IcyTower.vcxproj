@@ -160,11 +160,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraView.h" />
+    <ClInclude Include="FrameTime.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Platforms.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Walls.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
