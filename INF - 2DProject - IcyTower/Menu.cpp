@@ -176,6 +176,11 @@ bool Menu::loop(RenderWindow& window, CameraView& view, FrameTime& deltaTime,
 		player.draw(window, type, deltaTime);
 
 		if (type == "Title") {
+			if (!(player.canLoadState() &&
+				platforms.canLoadState() &&
+				view.canLoadState()))
+				menu[0].setFillColor(Color(150, 150, 154));
+
 			if (exitTag == "Continue") {
 				if (view.loadFromFile(window) &&
 					platforms.loadFromFile() &&
@@ -350,6 +355,7 @@ bool Menu::loop(RenderWindow& window, CameraView& view, FrameTime& deltaTime,
 		draw(window, deltaTime);
 		window.display();
 	}
+	return false;
 }
 
 string Menu::loadDifficulty() {

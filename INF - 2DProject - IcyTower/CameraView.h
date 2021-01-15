@@ -12,7 +12,7 @@ class FrameTime;
 class CameraView{
 public:
 	CameraView(RenderWindow& window);
-	void update(RenderWindow& window, Player& player, FrameTime& deltaTIme);
+	void update(RenderWindow& window, Player& player, FrameTime& deltaTime);
 	Vector2f getSize() { return view.getSize(); }
 	Vector2f getCenter() { return view.getCenter(); }
 	float getSpeed() { return scrollSpeed; }
@@ -22,6 +22,7 @@ public:
 
 	bool saveToFile();
 	bool loadFromFile(RenderWindow& window);
+	static bool canLoadState();
 
 private:
 	void followPlayer(Player& player);
