@@ -291,7 +291,7 @@ bool Player::alive(View& view) {
 string Player::getCurrentCharacter() {
 	FILE* fp;
 	string character = characters[0];
-	char characterC[20];
+	char characterC[20] = { 0 };
 	fp = fopen("data\\Character.dat", "r+b");
 	if (fp == NULL)
 		return character;
@@ -387,4 +387,15 @@ bool Player::loadFromFile() {
 	currentLevel = tempCurrentLevel;
 	// <--
 	return true;
+}
+
+bool Player::canLoadState() {
+	FILE* fp;
+	bool canLoad = false;
+	fp = fopen("data\\PlayerState.dat", "r+b");
+	if (fp != NULL) {
+		fread(&canLoad, sizeof(bool), 1, fp);
+		fclose(fp);
+	}
+	return canLoad;
 }

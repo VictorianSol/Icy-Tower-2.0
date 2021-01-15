@@ -94,3 +94,14 @@ bool CameraView::loadFromFile(RenderWindow& window) {
 	// <--
 	return true;
 }
+
+bool CameraView::canLoadState() {
+	FILE* fp;
+	bool canLoad = false;
+	fp = fopen("data\\CameraViewState.dat", "r+b");
+	if (fp != NULL) {
+		fread(&canLoad, sizeof(bool), 1, fp);
+		fclose(fp);
+	}
+	return canLoad;
+}

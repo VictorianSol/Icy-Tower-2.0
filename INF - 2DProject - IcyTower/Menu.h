@@ -22,7 +22,7 @@ public:
 	static bool saveHighscore(Platforms& platforms, int deathLevel);
 	static VideoMode loadResolution();
 	static bool fps();
-	bool toggleFPS();
+	static bool toggleFPS();
 	static void addPlaycount();
 	static void addPlaytime(Clock& clock);
 

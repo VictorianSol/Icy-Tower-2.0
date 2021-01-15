@@ -35,6 +35,7 @@ public:
 
 	bool saveToFile();
 	bool loadFromFile();
+	static bool canLoadState();
 
 private:
 	RectangleShape player;
