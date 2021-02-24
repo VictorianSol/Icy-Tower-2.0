@@ -77,7 +77,7 @@ void Platforms::draw(RenderWindow& window, CameraView& view) {
 		window.draw(platforms[i]);
 }
 
-int Platforms::CheckView(CameraView& view) {
+int Platforms::CheckView(CameraView& view) const {
 	for (int i = 0; i < PLATFORMS_NUMBER; i++)
 		if (platforms[i].getPosition().y >= view.getCenter().y + view.getSize().y / 2.f)
 			return i;
@@ -109,7 +109,7 @@ void Platforms::Randomise(CameraView& view, int i) {
 		);
 }
 
-bool Platforms::saveToFile() {
+bool Platforms::saveToFile() const{
 	FILE* fp;
 	bool canRead = true;
 	// -->

@@ -276,19 +276,19 @@ void Player::collideWalls(Walls& walls) {
 	}
 }
 
-bool Player::alive(CameraView& view) {
+bool Player::alive(CameraView& view) const {
 	if (player.getPosition().y - playerShape.y / 2.f >= view.getCenter().y + view.getSize().y / 2.f)
 		return false;
 	return true;
 }
 
-bool Player::alive(View& view) {
+bool Player::alive(View& view) const {
 	if (player.getPosition().y - playerShape.y / 2.f >= view.getCenter().y + view.getSize().y / 2.f)
 		return false;
 	return true;
 }
 
-string Player::getCurrentCharacter() {
+string Player::getCurrentCharacter() const {
 	FILE* fp;
 	string character = characters[0];
 	char characterC[20] = { 0 };
@@ -327,7 +327,7 @@ void Player::changeCurrentCharacter() {
 	fclose(fp);
 }
 
-bool Player::saveToFile() {
+bool Player::saveToFile() const {
 	FILE* fp;
 	bool canRead = true;
 	// -->

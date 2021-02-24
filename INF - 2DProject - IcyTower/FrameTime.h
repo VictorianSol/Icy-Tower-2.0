@@ -5,7 +5,7 @@
 class FrameTime{
 public:
 	void restart() { clock.restart(); }
-	float average() {
+	float average() const {
 		float avg = 0.f;
 		int i = 0;
 		for (auto a = frametime.begin(); a < frametime.end(); ++a, ++i)
@@ -17,8 +17,8 @@ public:
 		if (frametime.size() > 30)
 			frametime.erase(frametime.begin());
 	}
-	float avgConv() { return 111.f * average(); }
-	float fps() { return 1.f / average(); }
+	float avgConv() const { return 111.f * average(); }
+	float fps() const { return 1.f / average(); }
 
 private:
 	std::vector<float> frametime;

@@ -15,19 +15,19 @@ class Platforms{
 public:
 	Platforms(CameraView& view);
 	void draw(RenderWindow& window, CameraView& view);
-	int getNoPlatforms() { return PLATFORMS_NUMBER; }
-	Vector2f getPosition(int i) { return platforms[i].getPosition(); };
-	Vector2f getSize(int i) { return platforms[i].getSize(); }
-	int getPlatformLevel(int i) { return platformLevel[i]; }
-	string getDifficulty() { return diffString; };
+	int getNoPlatforms() const { return PLATFORMS_NUMBER; }
+	Vector2f getPosition(int i) const { return platforms[i].getPosition(); };
+	Vector2f getSize(int i) const { return platforms[i].getSize(); }
+	int getPlatformLevel(int i) const { return platformLevel[i]; }
+	string getDifficulty() const { return diffString; };
 
-	bool saveToFile();
+	bool saveToFile() const;
 	bool loadFromFile();
 	static bool canLoadState();
 
 private:
 	void loadDifficulty();
-	int CheckView(CameraView& view);
+	int CheckView(CameraView& view) const;
 	void Randomise(CameraView& view, int i);
 	RectangleShape platforms[PLATFORMS_NUMBER];
 	Texture platformsTexture[PLATFORMS_TYPE];

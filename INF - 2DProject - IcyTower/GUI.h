@@ -17,7 +17,7 @@ class GUI{
 public:
 	GUI();
 	void update(CameraView& view, Player& player, FrameTime& deltaTime);
-	void draw(RenderWindow& window);
+	void draw(RenderWindow& window) const;
 	void devOptions() { devToggle = !devToggle; }
 
 private:
