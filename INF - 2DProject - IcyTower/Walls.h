@@ -12,8 +12,8 @@ class Walls{
 public:
 	Walls(CameraView& view);
 	void draw(RenderWindow& window, CameraView& view);
-	Vector2f getPosition(int i) { return walls[i].getPosition(); }
-	Vector2f getSize(int i) { return walls[i].getSize(); }
+	Vector2f getPosition(int i) const { return walls[i].getPosition(); }
+	Vector2f getSize(int i) const { return walls[i].getSize(); }
 
 private:
 	RectangleShape walls[WALLS_NUMBER];

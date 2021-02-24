@@ -20,7 +20,7 @@ void GUI::update(CameraView& view, Player& player, FrameTime& deltaTime) {
 		devOptions(view, player, deltaTime);
 }
 
-void GUI::draw(RenderWindow& window) {
+void GUI::draw(RenderWindow& window) const{
 	window.draw(currentLevel);
 	if (devToggle)
 		for (int i = 0; i < DEV_SIZE; i++)

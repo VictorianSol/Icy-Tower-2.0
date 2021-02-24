@@ -24,16 +24,16 @@ public:
 	void move(CameraView& view, FrameTime& deltaTime);
 	void collidePlatforms(Platforms& platforms);
 	void collideWalls(Walls& walls);
-	Vector2f getPosition() { return player.getPosition(); }
-	Vector2f getSize() { return playerShape; }
-	Vector2f getVelocity() { return playerVelocity; }
-	int getCurrentLevel() { return currentLevel; }
-	bool alive(CameraView& view);
-	bool alive(View& view);
-	string getCurrentCharacter();
+	Vector2f getPosition() const { return player.getPosition(); }
+	Vector2f getSize() const { return playerShape; }
+	Vector2f getVelocity() const { return playerVelocity; }
+	int getCurrentLevel() const { return currentLevel; }
+	bool alive(CameraView& view) const;
+	bool alive(View& view) const;
+	string getCurrentCharacter() const;
 	void changeCurrentCharacter();
 
-	bool saveToFile();
+	bool saveToFile() const;
 	bool loadFromFile();
 	static bool canLoadState();
 
@@ -56,7 +56,7 @@ private:
 	bool onEdgeR;
 	int currentLevel;
 
-	string characters[CHARACTER_COUNT] = {
+	const string characters[CHARACTER_COUNT] = {
 		"Icy",
 		"Disco Dave"
 	};

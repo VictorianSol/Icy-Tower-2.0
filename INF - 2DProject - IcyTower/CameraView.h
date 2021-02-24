@@ -13,9 +13,9 @@ class CameraView{
 public:
 	CameraView(RenderWindow& window);
 	void update(RenderWindow& window, Player& player, FrameTime& deltaTime);
-	Vector2f getSize() { return view.getSize(); }
-	Vector2f getCenter() { return view.getCenter(); }
-	float getSpeed() { return scrollSpeed; }
+	Vector2f getSize() const { return view.getSize(); }
+	Vector2f getCenter() const { return view.getCenter(); }
+	float getSpeed() const { return scrollSpeed; }
 	void setViewport(FloatRect visibleArea) { view.setViewport(visibleArea); }
 	void setSize(float x, float y) { view.setSize(x, y); }
 	void setCenter(Vector2f viewpos) { view.setCenter(viewpos); }

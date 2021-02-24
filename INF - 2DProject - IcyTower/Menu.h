@@ -30,8 +30,8 @@ private:
 	void draw(RenderWindow& window, FrameTime& deltaTime);
 	bool move(RenderWindow& window, CameraView& view);
 	string loadDifficulty();
-	int getPlaycount();
-	string getPlaytime();
+	static int getPlaycount();
+	static string getPlaytime();
 
 	string type;
 	int menuPosCount;
@@ -48,15 +48,15 @@ private:
 	Text highScores[DIFFICULTY_COUNT];
 	Text help;
 	Text playtime;
-	string resolutionS[4] = {
+	const string resolutionS[4] = {
 		"Resolution: 400 x 400",
 		"Resolution: 680 x 680",
 		"Resolution: 850 x 850",
 		"Resolution: 1000 x 1000"
 	};
-	unsigned int resolutionU[4] = { 400, 680, 850, 1000 };
+	const unsigned int resolutionU[4] = { 400, 680, 850, 1000 };
 	int resCount;
-	string difficulties[DIFFICULTY_COUNT] = {
+	const string difficulties[DIFFICULTY_COUNT] = {
 		"Normal",
 		"Hard",
 		"Extreme"
