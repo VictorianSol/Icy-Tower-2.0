@@ -13,4 +13,4 @@
 To run the game download the "x64/Release" folder and run .exe.
 All the data files will be generated automatically.
 
-<a href="https://youtu.be/wTdsOLkvDyg">![image](https://user-images.githubusercontent.com/76051722/123559957-84a35280-d79f-11eb-9750-7e9ae710cd04.png)</a>
+<a href="https://youtu.be/wTdsOLkvDyg" target="_blank" rel="noopener">![image](https://user-images.githubusercontent.com/76051722/123559957-84a35280-d79f-11eb-9750-7e9ae710cd04.png)</a>
