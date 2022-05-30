@@ -20,17 +20,17 @@ Player::Player(CameraView& view) {	// 58:44
 
 	player.setOrigin(Vector2f(player.getSize().x / 2.f, player.getSize().y / 2.f));
 
-	animationFrame = 0;
-	animationTexture = 0;
-	animationType = 0;
-	animationTypeOld = 0;
-	currentLevel = 0;
-	canJump = true;
-	canBoost = true;
-	wallStopL = false;
-	wallStopR = false;
-	onEdgeL = false;
-	onEdgeR = false;
+	// animationFrame = 0;
+	// animationTexture = 0;
+	// animationType = 0;
+	// animationTypeOld = 0;
+	// currentLevel = 0;
+	// canJump = true;
+	// canBoost = true;
+	// wallStopL = false;
+	// wallStopR = false;
+	// onEdgeL = false;
+	// onEdgeR = false;
 }
 
 void Player::draw(RenderWindow& window, string menuType, FrameTime& deltaTime) {
